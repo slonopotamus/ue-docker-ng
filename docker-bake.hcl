@@ -92,14 +92,14 @@ variable "windows-setup-args" {
 }
 
 variable "linux-minimal-tags" {
-  type = [string]
+  type = list(string)
   default = [
     format("%s/minimal:%s-linux", tag-namespace, source-tag)
   ]
 }
 
 variable "windows-minimal-tags" {
-  type = [string]
+  type = list(string)
   default = [
     format("%s/minimal:%s-windows", tag-namespace, source-tag)
   ]
