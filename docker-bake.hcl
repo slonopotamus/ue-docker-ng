@@ -26,6 +26,16 @@ variable "linux-buildgraph-args" {
   ]
 }
 
+variable "linux-setup-args" {
+  type = list(string)
+  default = [
+    "--exclude=Android",
+    "--exclude=Mac",
+    "--exclude=Win32",
+    "--exclude=Win64",
+  ]
+}
+
 variable "windows-baseimage" {
   type = string
   default = "docker-image://mcr.microsoft.com/windows/server:ltsc2022"
@@ -41,6 +51,15 @@ variable "windows-platforms" {
 variable "windows-buildgraph-args" {
   type = list(string)
   default = [
+  ]
+}
+
+variable "windows-setup-args" {
+  type = list(string)
+  default = [
+    "--exclude=Android",
+    "--exclude=Mac",
+    "--exclude=Linux",
   ]
 }
 
@@ -64,6 +83,7 @@ target "linux-source" {
   }
   args = {
     repository = repository
+    setup_args = join(" ", linux-setup-args)
   }
   secret = [
     {
@@ -153,6 +173,9 @@ target "windows-source" {
   contexts = {
     source-prep: "target:windows-source-prep"
     vs: "target:windows-vs"
+  }
+  args = {
+    setup_args = join(" ", windows-setup-args)
   }
   output = [
     {

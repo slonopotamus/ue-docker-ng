@@ -9,6 +9,7 @@ RUN python C:/patch-setup-win.py C:/UnrealEngine/Setup.bat
 
 # Run post-clone setup steps
 # (Note that the \-no-cache\ flag disables caching of dependency data in \.git/ue4-gitdeps\, saving disk space)
-RUN C:/UnrealEngine/Setup.bat -no-cache --exclude=Android --exclude=Mac --exclude=Linux
+ARG setup_args=""
+RUN C:/UnrealEngine/Setup.bat -no-cache %setup_args%
 
 WORKDIR C:/UnrealEngine
