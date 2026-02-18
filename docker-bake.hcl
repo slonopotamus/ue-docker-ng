@@ -1,8 +1,3 @@
-variable "verbose" {
-  type = bool
-  default = false
-}
-
 variable "repository" {
   type = string
   default = "https://github.com/EpicGames/UnrealEngine.git#5.7.3-release"
@@ -35,7 +30,6 @@ target "linux-source" {
   }
   args = {
     repository = repository
-    verbose = verbose
   }
   secret = [
     {
@@ -88,7 +82,7 @@ target "windows-source" {
     base: "target:windows-base"
   }
   args = {
-    verbose = verbose
+    repository = repository
   }
   platforms = windows-platforms
 }

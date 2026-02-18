@@ -15,7 +15,6 @@ def writeFile(filename, data):
 # Comment out the call to the UE4 prereqs installer in Setup.bat
 PREREQ_CALL = "start /wait Engine\\Extras\\Redist\\en-us\\UE4PrereqSetup_x64.exe"
 setupScript = sys.argv[1]
-verboseOutput = len(sys.argv) > 2 and bool(sys.argv[2])
 code = readFile(setupScript)
 code = code.replace(
     "echo Installing prerequisites...", "echo (Skipping installation of prerequisites)"
@@ -34,7 +33,4 @@ code = code.replace("pause", "@rem pause")
 writeFile(setupScript, code)
 
 # Print the patched code to stderr for debug purposes
-if verboseOutput == True:
-    print("PATCHED {}:\n\n{}".format(setupScript, code), file=sys.stderr)
-else:
-    print("PATCHED {}".format(setupScript), file=sys.stderr)
+print("PATCHED {}:\n\n{}".format(setupScript, code), file=sys.stderr)
