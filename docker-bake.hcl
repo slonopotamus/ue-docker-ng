@@ -1,6 +1,16 @@
-variable "repository" {
+variable "source-repository" {
   type    = string
-  default = "https://github.com/EpicGames/UnrealEngine.git#5.7.3-release"
+  default = "https://github.com/EpicGames/UnrealEngine.git"
+}
+
+variable "source-tag" {
+  type    = string
+  default = "5.7.3-release"
+}
+
+variable "source-url" {
+  type = string
+  default = format("%s#%s", source-repository, source-tag)
 }
 
 variable "changelist" {
@@ -8,9 +18,32 @@ variable "changelist" {
   default = "auto"
 }
 
+variable "tag-namespace" {
+  type    = string
+  default = "slonopotamus"
+}
+
+variable "image-outputs" {
+  type = list(map(string, string))
+  default = [
+    {
+      type           = "image"
+      oci-mediatypes = true
+      compression    = "zstd"
+      push           = true
+      unpack         = false
+    }
+  ]
+}
+
 variable "linux-baseimage" {
   type    = string
   default = "docker-image://ubuntu:22.04"
+}
+
+variable "windows-baseimage" {
+  type    = string
+  default = "docker-image://mcr.microsoft.com/windows/server:ltsc2022"
 }
 
 variable "linux-platforms" {
@@ -20,7 +53,20 @@ variable "linux-platforms" {
   ]
 }
 
+variable "windows-platforms" {
+  type = list(string)
+  default = [
+    "windows/amd64"
+  ]
+}
+
 variable "linux-buildgraph-args" {
+  type = list(string)
+  default = [
+  ]
+}
+
+variable "windows-buildgraph-args" {
   type = list(string)
   default = [
   ]
@@ -36,30 +82,26 @@ variable "linux-setup-args" {
   ]
 }
 
-variable "windows-baseimage" {
-  type    = string
-  default = "docker-image://mcr.microsoft.com/windows/server:ltsc2022"
-}
-
-variable "windows-platforms" {
-  type = list(string)
-  default = [
-    "windows/amd64"
-  ]
-}
-
-variable "windows-buildgraph-args" {
-  type = list(string)
-  default = [
-  ]
-}
-
 variable "windows-setup-args" {
   type = list(string)
   default = [
     "--exclude=Android",
     "--exclude=Mac",
     "--exclude=Linux",
+  ]
+}
+
+variable "linux-minimal-tags" {
+  type = [string]
+  default = [
+    format("%s/minimal:%s-linux", tag-namespace, source-tag)
+  ]
+}
+
+variable "windows-minimal-tags" {
+  type = [string]
+  default = [
+    format("%s/minimal:%s-windows", tag-namespace, source-tag)
   ]
 }
 
@@ -82,7 +124,7 @@ target "linux-source" {
     base : "target:linux-base"
   }
   args = {
-    repository = repository
+    repository = source-url
     setup_args = join(" ", linux-setup-args)
   }
   secret = [
@@ -122,6 +164,8 @@ target "linux-minimal" {
     base : "target:linux-base"
     builder : "target:linux-builder"
   }
+  tags      = linux-minimal-tags
+  output    = image-outputs
   platforms = linux-platforms
 }
 
@@ -144,8 +188,13 @@ target "windows-source-prep" {
     base : "target:windows-base"
   }
   args = {
-    repository = repository
+    repository = source-url
   }
+  secret = [
+    {
+      id : "GIT_AUTH_TOKEN"
+    }
+  ]
   output = [
     {
       type = "cacheonly"
@@ -209,6 +258,8 @@ target "windows-minimal" {
     builder : "target:windows-builder"
     vs : "target:windows-vs"
   }
+  tags      = windows-minimal-tags
+  output    = image-outputs
   platforms = windows-platforms
 }
 
