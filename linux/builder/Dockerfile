@@ -2,7 +2,7 @@ FROM source
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
 ARG changelist
-COPY set-changelist.py /tmp/set-changelist.py
+COPY --link --from=common set-changelist.py /tmp/set-changelist.py
 RUN python3 /tmp/set-changelist.py /home/ue/UnrealEngine/Engine/Build/Build.version $changelist
 
 # Remove the .git directory to disable UBT `git status` calls and speed up the build process
@@ -14,13 +14,15 @@ RUN rm -rf .git
 RUN ./Engine/Build/BatchFiles/BuildUBT.sh
 
 # Create an Installed Build of the Engine
+ARG buildgraph_args
 RUN ./Engine/Build/BatchFiles/RunUAT.sh BuildGraph \
 	-target="Make Installed Build Linux" \
 	-script=Engine/Build/InstalledEngineBuild.xml \
 	-set:HostPlatformOnly=true \
 	-set:WithClient=true \
 	-set:WithDDC=false \
-	-set:WithServer=true && \
+	-set:WithServer=true \
+    $buildgraph_args && \
 	rm -R -f ./LocalBuilds/InstalledDDC
 
 # Ensure UnrealVersionSelector is built, since the prebuilt binaries may not be up-to-date
@@ -34,5 +36,5 @@ RUN cp LocalBuilds/Engine/Linux/Engine/Build/InstalledBuild.txt Engine/Build/Ins
 
 # Split out both optional components (DDC, debug symbols, template projects) and large subdirectories so they can be copied
 # into the final container image as separate filesystem layers, avoiding creating a single monolithic layer with everything
-COPY split-components.py /tmp/split-components.py
+COPY --link split-components.py /tmp/split-components.py
 RUN python3 /tmp/split-components.py LocalBuilds/Engine/Linux Components

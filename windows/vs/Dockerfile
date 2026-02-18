@@ -5,5 +5,5 @@ RUN pip install json-with-comments
 # Only copy files required to determine Visual Studio version to avoid reinstalling it when minor engine changes happen
 COPY --from=source-prep C:/UnrealEngine/Engine/Config/Windows C:/install-vs/
 COPY --from=source-prep C:/UnrealEngine/Engine/Build/Build.version C:/install-vs/
-COPY install-vs.py C:/install-vs/
+COPY --link install-vs.py C:/install-vs/
 RUN python C:/install-vs/install-vs.py C:/install-vs/Windows_SDK.json C:/install-vs/Build.Version

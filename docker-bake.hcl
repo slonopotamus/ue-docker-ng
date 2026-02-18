@@ -20,6 +20,12 @@ variable "linux-platforms" {
   ]
 }
 
+variable "linux-buildgraph-args" {
+  type = list(string)
+  default = [
+  ]
+}
+
 variable "windows-baseimage" {
   type = string
   default = "docker-image://mcr.microsoft.com/windows/server:ltsc2022"
@@ -29,6 +35,12 @@ variable "windows-platforms" {
   type = list(string)
   default = [
     "windows/amd64"
+  ]
+}
+
+variable "windows-buildgraph-args" {
+  type = list(string)
+  default = [
   ]
 }
 
@@ -69,7 +81,12 @@ target "linux-source" {
 target "linux-builder" {
   context = "./linux/builder"
   contexts = {
+    common: "./common"
     source: "target:linux-source"
+  }
+  args = {
+    changelist = changelist
+    buildgraph_args = join(" ", linux-buildgraph-args)
   }
   output = [
     {
@@ -82,8 +99,8 @@ target "linux-builder" {
 target "linux-minimal" {
   context = "./linux/minimal"
   contexts = {
-    "base": "target:linux-base"
-    "builder": "target:linux-builder"
+    base: "target:linux-base"
+    builder: "target:linux-builder"
   }
   platforms = linux-platforms
 }
@@ -148,10 +165,12 @@ target "windows-source" {
 target "windows-builder" {
   context = "./windows/builder"
   contexts = {
+    common: "./common"
     source: "target:windows-source"
   }
   args = {
     changelist = changelist
+    buildgraph_args = join(" ", windows-buildgraph-args)
   }
   output = [
     {
