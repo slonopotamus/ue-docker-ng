@@ -1,0 +1,18 @@
+name: Format HCL
+on:
+  push
+jobs:
+  format-hcl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Format HCL files
+        uses: devops-infra/action-format-hcl@v1.0.1
+
+      - name: Commit changes to repo
+        uses: devops-infra/action-commit-push@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_prefix: "[AUTO-FORMAT-HCL]"
