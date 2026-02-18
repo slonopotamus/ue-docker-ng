@@ -7,5 +7,5 @@
 
 [source,bash]
 ----
-GIT_AUTH_TOKEN=<token> docker bake -f linux/docker-bake.hcl
+GIT_AUTH_TOKEN=<token> docker bake https://github.com/slonopotamus/ue-docker-ng.git#main:linux
 ----
