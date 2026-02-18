@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 from os.path import dirname
 from subprocess import run, PIPE
 import json, re, sys
@@ -16,7 +17,7 @@ def writeFile(filename, data):
 
 # Determine whether a changelist override value was specified
 changelistOverride = None
-if len(sys.argv) > 2 and sys.argv[2] != "%CHANGELIST%":
+if len(sys.argv) > 2 and sys.argv[2] != "%changelist%":
     # If the override was "auto" then attempt to retrieve the CL number from the git commit message
     if sys.argv[2] == "auto":
         # Retrieve the commit message from git

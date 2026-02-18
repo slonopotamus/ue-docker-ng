@@ -3,6 +3,11 @@ variable "repository" {
   default = "https://github.com/EpicGames/UnrealEngine.git#5.7.3-release"
 }
 
+variable "changelist" {
+  type = string
+  default = "auto"
+}
+
 variable "linux-baseimage" {
   type = string
   default = "docker-image://ubuntu:22.04"
@@ -12,6 +17,18 @@ variable "linux-platforms" {
   type = list(string)
   default = [
     "linux/amd64"
+  ]
+}
+
+variable "windows-baseimage" {
+  type = string
+  default = "docker-image://mcr.microsoft.com/windows/server:ltsc2022"
+}
+
+variable "windows-platforms" {
+  type = list(string)
+  default = [
+    "windows/amd64"
   ]
 }
 
@@ -56,18 +73,6 @@ target "linux-minimal" {
   platforms = linux-platforms
 }
 
-variable "windows-baseimage" {
-  type = string
-  default = "docker-image://mcr.microsoft.com/windows/server:ltsc2022"
-}
-
-variable "windows-platforms" {
-  type = list(string)
-  default = [
-    "windows/amd64"
-  ]
-}
-
 target "windows-base" {
   context = "windows/base"
   contexts = {
@@ -76,8 +81,8 @@ target "windows-base" {
   platforms = windows-platforms
 }
 
-target "windows-source" {
-  context = "windows/source"
+target "windows-source-prep" {
+  context = "windows/source-prep"
   contexts = {
     base: "target:windows-base"
   }
@@ -91,15 +96,15 @@ target "windows-vs" {
   context = "windows/vs"
   contexts = {
     base: "target:windows-base"
-    source: "target:windows-source"
+    source-prep: "target:windows-source-prep"
   }
   platforms = windows-platforms
 }
 
-target "windows-source-with-vs" {
-  context = "windows/source-with-vs"
+target "windows-source" {
+  context = "windows/source"
   contexts = {
-    source: "target:windows-source"
+    source-prep: "target:windows-source-prep"
     vs: "target:windows-vs"
   }
   platforms = windows-platforms
@@ -108,7 +113,10 @@ target "windows-source-with-vs" {
 target "windows-builder" {
   context = "./windows/builder"
   contexts = {
-    source-with-vs: "target:windows-source-with-vs"
+    source: "target:windows-source"
+  }
+  args = {
+    changelist = changelist
   }
   platforms = windows-platforms
 }
