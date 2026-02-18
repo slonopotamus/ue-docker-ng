@@ -21,7 +21,7 @@ variable "platforms" {
 }
 
 target "base" {
-  context = "linux/base"
+  context = "./base"
   contexts = {
     baseimage = baseimage
   }
@@ -29,7 +29,7 @@ target "base" {
 }
 
 target "source" {
-  context = "linux/source"
+  context = "./source"
   contexts = {
     base: "target:base"
   }
@@ -46,7 +46,7 @@ target "source" {
 }
 
 target "builder" {
-  context = "linux/builder"
+  context = "./builder"
   contexts = {
     source: "target:source"
   }
@@ -54,7 +54,7 @@ target "builder" {
 }
 
 target "minimal" {
-  context = "linux/minimal"
+  context = "./minimal"
   contexts = {
     "base": "target:base"
     "builder": "target:builder"
