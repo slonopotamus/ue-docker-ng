@@ -37,6 +37,11 @@ target "linux-base" {
   contexts = {
     baseimage = linux-baseimage
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = linux-platforms
 }
 
@@ -53,6 +58,11 @@ target "linux-source" {
       id: "GIT_AUTH_TOKEN"
     }
   ]
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = linux-platforms
 }
 
@@ -61,6 +71,11 @@ target "linux-builder" {
   contexts = {
     source: "target:linux-source"
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = linux-platforms
 }
 
@@ -78,6 +93,11 @@ target "windows-base" {
   contexts = {
     baseimage = windows-baseimage
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
@@ -89,6 +109,11 @@ target "windows-source-prep" {
   args = {
     repository = repository
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
@@ -98,6 +123,11 @@ target "windows-vs" {
     base: "target:windows-base"
     source-prep: "target:windows-source-prep"
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
@@ -107,6 +137,11 @@ target "windows-source" {
     source-prep: "target:windows-source-prep"
     vs: "target:windows-vs"
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
@@ -118,6 +153,11 @@ target "windows-builder" {
   args = {
     changelist = changelist
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
