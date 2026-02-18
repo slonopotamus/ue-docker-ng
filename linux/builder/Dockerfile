@@ -2,7 +2,7 @@ FROM source
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
 ARG changelist
-COPY --link --from=common set-changelist.py /tmp/set-changelist.py
+COPY --from=common set-changelist.py /tmp/set-changelist.py
 RUN python3 /tmp/set-changelist.py /home/ue/UnrealEngine/Engine/Build/Build.version $changelist
 
 # Remove the .git directory to disable UBT `git status` calls and speed up the build process
@@ -33,8 +33,3 @@ RUN ./Engine/Build/BatchFiles/Linux/Build.sh UnrealVersionSelector Linux Shippin
 # (Note also that custom Build IDs are supported by Unreal Engine 5.3.1 and newer, and older versions will just use a GUID as the Build ID)
 RUN cp LocalBuilds/Engine/Linux/Engine/Build/InstalledBuild.txt Engine/Build/InstalledBuild.txt && \
 	./Engine/Binaries/Linux/UnrealVersionSelector-Linux-Shipping -register -unattended
-
-# Split out both optional components (DDC, debug symbols, template projects) and large subdirectories so they can be copied
-# into the final container image as separate filesystem layers, avoiding creating a single monolithic layer with everything
-COPY --link split-components.py /tmp/split-components.py
-RUN python3 /tmp/split-components.py LocalBuilds/Engine/Linux Components

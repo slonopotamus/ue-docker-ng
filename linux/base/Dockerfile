@@ -1,6 +1,6 @@
 FROM baseimage
 
-COPY --link --chmod=755 install-prerequisites.sh /tmp/
+COPY --chmod=755 install-prerequisites.sh /tmp/
 RUN /tmp/install-prerequisites.sh
 
 RUN useradd --create-home --home /home/ue --shell /bin/bash --uid 1000 ue && \
