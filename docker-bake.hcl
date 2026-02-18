@@ -58,7 +58,7 @@ target "linux-minimal" {
 
 variable "windows-baseimage" {
   type = string
-  default = "docker-image://mcr.microsoft.com/windows/server:ltsc2025"
+  default = "docker-image://mcr.microsoft.com/windows/server:ltsc2022"
 }
 
 variable "windows-platforms" {
