@@ -1,15 +1,15 @@
 variable "repository" {
-  type = string
+  type    = string
   default = "https://github.com/EpicGames/UnrealEngine.git#5.7.3-release"
 }
 
 variable "changelist" {
-  type = string
+  type    = string
   default = "auto"
 }
 
 variable "linux-baseimage" {
-  type = string
+  type    = string
   default = "docker-image://ubuntu:22.04"
 }
 
@@ -37,7 +37,7 @@ variable "linux-setup-args" {
 }
 
 variable "windows-baseimage" {
-  type = string
+  type    = string
   default = "docker-image://mcr.microsoft.com/windows/server:ltsc2022"
 }
 
@@ -79,7 +79,7 @@ target "linux-base" {
 target "linux-source" {
   context = "./linux/source"
   contexts = {
-    base: "target:linux-base"
+    base : "target:linux-base"
   }
   args = {
     repository = repository
@@ -87,7 +87,7 @@ target "linux-source" {
   }
   secret = [
     {
-      id: "GIT_AUTH_TOKEN"
+      id : "GIT_AUTH_TOKEN"
     }
   ]
   output = [
@@ -101,8 +101,8 @@ target "linux-source" {
 target "linux-builder" {
   context = "./linux/builder"
   contexts = {
-    common: "./common"
-    source: "target:linux-source"
+    common : "./common"
+    source : "target:linux-source"
   }
   args = {
     changelist = changelist
@@ -119,8 +119,8 @@ target "linux-builder" {
 target "linux-minimal" {
   context = "./linux/minimal"
   contexts = {
-    base: "target:linux-base"
-    builder: "target:linux-builder"
+    base : "target:linux-base"
+    builder : "target:linux-builder"
   }
   platforms = linux-platforms
 }
@@ -141,7 +141,7 @@ target "windows-base" {
 target "windows-source-prep" {
   context = "windows/source-prep"
   contexts = {
-    base: "target:windows-base"
+    base : "target:windows-base"
   }
   args = {
     repository = repository
@@ -157,8 +157,8 @@ target "windows-source-prep" {
 target "windows-vs" {
   context = "windows/vs"
   contexts = {
-    base: "target:windows-base"
-    source-prep: "target:windows-source-prep"
+    base : "target:windows-base"
+    source-prep : "target:windows-source-prep"
   }
   output = [
     {
@@ -171,8 +171,8 @@ target "windows-vs" {
 target "windows-source" {
   context = "windows/source"
   contexts = {
-    source-prep: "target:windows-source-prep"
-    vs: "target:windows-vs"
+    source-prep : "target:windows-source-prep"
+    vs : "target:windows-vs"
   }
   args = {
     setup_args = join(" ", windows-setup-args)
@@ -188,8 +188,8 @@ target "windows-source" {
 target "windows-builder" {
   context = "./windows/builder"
   contexts = {
-    common: "./common"
-    source: "target:windows-source"
+    common : "./common"
+    source : "target:windows-source"
   }
   args = {
     changelist = changelist
@@ -206,8 +206,8 @@ target "windows-builder" {
 target "windows-minimal" {
   context = "windows/minimal"
   contexts = {
-    builder: "target:windows-builder"
-    vs: "target:windows-vs"
+    builder : "target:windows-builder"
+    vs : "target:windows-vs"
   }
   platforms = windows-platforms
 }
