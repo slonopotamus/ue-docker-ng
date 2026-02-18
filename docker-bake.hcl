@@ -24,7 +24,7 @@ variable "tag-namespace" {
 }
 
 variable "image-outputs" {
-  type = list(map(string, string))
+  type = list(map(string))
   default = [
     {
       type           = "image"
