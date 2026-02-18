@@ -38,8 +38,7 @@ RUN python C:/patch-setup-win.py C:/UnrealEngine/Setup.bat ${verbose}
 
 # Run post-clone setup steps
 # (Note that the \-no-cache\ flag disables caching of dependency data in \.git/ue4-gitdeps\, saving disk space)
-WORKDIR C:/UnrealEngine
-RUN Setup.bat -no-cache {{ gitdependencies_args }}
+RUN C:/UnrealEngine/Setup.bat -no-cache
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
 ARG CHANGELIST
