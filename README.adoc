@@ -9,3 +9,7 @@
 ----
 GIT_AUTH_TOKEN=<token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git
 ----
+
+== Windows blockers
+
+* https://github.com/moby/buildkit/issues/6567
