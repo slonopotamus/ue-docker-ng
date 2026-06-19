@@ -103,6 +103,16 @@ variable "windows-minimal-tags" {
   ]
 }
 
+// This target should not exist. But it seems like that additional contexts are not resolved properly relative to git url.
+target "common" {
+  context = "./common"
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
+}
+
 target "linux-base" {
   context = "./linux/base"
   contexts = {
@@ -141,7 +151,7 @@ target "linux-source" {
 target "linux-builder" {
   context = "./linux/builder"
   contexts = {
-    common : "./common"
+    common : "target:common"
     source : "target:linux-source"
   }
   args = {
@@ -235,7 +245,7 @@ target "windows-source" {
 target "windows-builder" {
   context = "./windows/builder"
   contexts = {
-    common : "./common"
+    common : "target:common"
     source : "target:windows-source"
   }
   args = {
