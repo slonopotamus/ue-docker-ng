@@ -1,8 +1,8 @@
 FROM source
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
+COPY set-changelist.py /tmp/set-changelist.py
 ARG changelist
-COPY --from=common set-changelist.py /tmp/set-changelist.py
 RUN python3 /tmp/set-changelist.py /home/ue/UnrealEngine/Engine/Build/Build.version $changelist
 
 # Remove the .git directory to disable UBT `git status` calls and speed up the build process
