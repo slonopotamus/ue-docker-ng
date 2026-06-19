@@ -5,7 +5,7 @@ RUN if exist .git rmdir /s /q .git
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
 ARG changelist
-COPY --from=common set-changelist.py C:/set-changelist.py
+COPY --from=common set-changelist.py C:\\set-changelist.py
 RUN python C:/set-changelist.py C:/UnrealEngine/Engine/Build/Build.version %changelist%
 
 # Create an Installed Build of the Engine
