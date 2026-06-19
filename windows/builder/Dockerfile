@@ -10,7 +10,7 @@ RUN python C:/set-changelist.py C:/UnrealEngine/Engine/Build/Build.version %chan
 
 # Create an Installed Build of the Engine
 ARG buildgraph_args
-RUN Engine/Build/BatchFiles/RunUAT.bat BuildGraph \
+RUN Engine\Build\BatchFiles\RunUAT.bat BuildGraph \
 	-target="Make Installed Build Win64" \
 	-script=Engine/Build/InstalledEngineBuild.xml \
 	-set:HostPlatformOnly=true \
