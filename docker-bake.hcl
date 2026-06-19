@@ -61,15 +61,13 @@ variable "windows-platforms" {
 }
 
 variable "linux-buildgraph-args" {
-  type = list(string)
-  default = [
-  ]
+  type = string
+  default = ""
 }
 
 variable "windows-buildgraph-args" {
-  type = list(string)
-  default = [
-  ]
+  type = string
+  default = ""
 }
 
 variable "linux-setup-args" {
@@ -148,7 +146,7 @@ target "linux-builder" {
   }
   args = {
     changelist = changelist
-    buildgraph_args = join(" ", linux-buildgraph-args)
+    buildgraph_args = linux-buildgraph-args
   }
   output = [
     {
@@ -242,7 +240,7 @@ target "windows-builder" {
   }
   args = {
     changelist = changelist
-    buildgraph_args = join(" ", windows-buildgraph-args)
+    buildgraph_args = windows-buildgraph-args
   }
   output = [
     {
