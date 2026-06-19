@@ -3,8 +3,9 @@ FROM base
 ARG repository=""
 ADD --keep-git-dir=true --chown=ue:ue $repository /home/ue/UnrealEngine
 
-ENV UE_GITDEPS=/home/ue/gitdeps
 ARG setup_args
-RUN --mount=type=cache,target=/home/ue/gitdeps,uid=1000,gid=1000 /home/ue/UnrealEngine/Setup.sh $setup_args
+# Run post-clone setup steps
+# (Note that the \-no-cache\ flag disables caching of dependency data in \.git/ue4-gitdeps\, saving disk space)
+RUN /home/ue/UnrealEngine/Setup.sh -no-cache $setup_args
 
 WORKDIR /home/ue/UnrealEngine
