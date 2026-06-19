@@ -31,9 +31,6 @@ RunProcessChecked "choco" @("install", "--no-progress", "-y", "choco-cleaner", "
 # Reload our environment variables from the registry so the `git` command works
 Update-SessionEnvironment
 
-# Forcibly disable the git credential manager
-RunProcessChecked "git" @("config", "--system", "--unset", "credential.helper")
-
 # Gather the required DirectX runtime files, since Windows Server Core does not include them
 Invoke-WebRequest -Uri "https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe" -OutFile "$env:TEMP\directx_redist.exe"
 RunProcessChecked "$env:TEMP\directx_redist.exe" @("/Q", "/T:$env:TEMP")
