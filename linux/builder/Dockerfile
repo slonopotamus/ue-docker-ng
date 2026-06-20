@@ -8,6 +8,9 @@ RUN python3 /tmp/set-changelist.py /home/ue/UnrealEngine/Engine/Build/Build.vers
 # Remove the .git directory to disable UBT `git status` calls and speed up the build process
 RUN rm -rf .git
 
+# Disable Nuget package auditing (warnings NU1902 and NU1903)
+ENV NuGetAudit=false
+
 # Ensure UBT is built before we create the Installed Build, since Build.sh explicitly sets the
 # target .NET Framework version, whereas InstalledEngineBuild.xml just uses the system default,
 # which can result in errors when running the built UBT due to the wrong version being targeted

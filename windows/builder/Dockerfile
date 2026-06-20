@@ -8,6 +8,9 @@ COPY set-changelist.py C:\\set-changelist.py
 ARG changelist
 RUN python C:/set-changelist.py C:/UnrealEngine/Engine/Build/Build.version %changelist%
 
+# Disable Nuget package auditing (warnings NU1902 and NU1903)
+ENV NuGetAudit=false
+
 # Create an Installed Build of the Engine
 ARG buildgraph_args
 RUN Engine\Build\BatchFiles\RunUAT.bat BuildGraph \
