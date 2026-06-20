@@ -38,9 +38,9 @@ class VisualStudio:
         vs_version = json_config["MinimumVisualStudio2022Version"]
 
         components = (
-                vs2022_components
-                + json_config["VisualStudioSuggestedComponents"]
-                + json_config["VisualStudio2022SuggestedComponents"]
+            vs2022_components
+            + json_config["VisualStudioSuggestedComponents"]
+            + json_config["VisualStudio2022SuggestedComponents"]
         )
 
         # UE-5.4 has buggy component version
