@@ -3,11 +3,124 @@
 :icons: font
 :toc:
 
-#TODO#
+A modern, multi-stage Docker build pipeline for producing Unreal Engine editor images for Linux and Windows.
+
+This project uses Docker Buildx Bake for composable, cache-efficient builds.
+
+== Features
+
+* **Multi-stage builds** - keep the final image lean by copying only the installed engine binaries.
+* **Cross-platform** - produces minimal images for both Linux and Windows.
+* **Buildx Bake** - targets are defined in link:docker-bake.hcl[docker-bake.hcl], making builds reproducible and easy to customise.
+* **Configurable source** - switch the Unreal Engine repository and tag via variables.
+* **Compressed OCI images** - output images use zstd compression by default for smaller storage footprint.
 
 == Usage
 
+Build a Linux minimal image::
++
 [source,bash]
 ----
-GIT_AUTH_TOKEN=<token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git <linux-minimal|windows-minimal>
+$ GIT_AUTH_TOKEN=<token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git linux-minimal
 ----
+
+Build a Windows minimal image::
++
+[source,bash]
+----
+$ GIT_AUTH_TOKEN=<token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git windows-minimal
+----
+
+=== Variables
+
+All variables are defined in link:docker-bake.hcl[docker-bake.hcl] and can be overridden via environment variables::
+
+[source,bash]
+----
+$ source-tag=5.8.0-release docker buildx bake linux-minimal
+----
+
+[cols="2,1,2"]
+|===
+|Variable |Default |Description
+
+|`source-repository`
+|`https://github.com/EpicGames/UnrealEngine.git`
+|Git URL for the Unreal Engine source
+
+|`source-tag`
+|`5.7.3-release`
+|Git tag or branch to checkout
+
+|`changelist`
+|`auto`
+|Override changelist number in `Build.version`; `auto` derives it from the tag
+
+|`tag-namespace`
+|`slonopotamus`
+|Docker image tag prefix
+
+|`linux-setup-args`
+|`--exclude=Android --exclude=Mac --exclude=Win32 --exclude=Win64`
+|Arguments passed to `Setup.sh` on Linux
+
+|`windows-setup-args`
+|`--exclude=Android --exclude=Mac --exclude=Linux`
+|Arguments passed to `Setup.bat` on Windows
+
+|`linux-buildgraph-args`
+|(empty)
+|Extra flags appended to the Linux BuildGraph command
+
+|`windows-buildgraph-args`
+|(empty)
+|Extra flags appended to the Windows BuildGraph command
+
+|`linux-baseimage`
+|`docker-image://ubuntu:22.04`
+|Base image for Linux builds
+
+|`windows-baseimage`
+|`docker-image://mcr.microsoft.com/windows/server:ltsc2022`
+|Base image for Windows builds
+
+|`linux-platforms`
+|`["linux/amd64"]`
+|Target platforms for Linux builds
+
+|`windows-platforms`
+|`["windows/amd64"]`
+|Target platforms for Windows builds
+|===
+
+== Project Structure
+
+[source]
+----
+.
+├── docker-bake.hcl                   # Buildx bake target definitions
+├── linux/
+│   ├── base/                         # OS prerequisites, user setup
+│   │   └── install-prerequisites.sh  # Installation script
+│   ├── source/                       # Clone repo, run Setup.sh to download dependencies
+│   ├── builder/                      # Create Installed Build
+│   │   └── set-changelist.py         # Changelist injection utility
+│   └── minimal/                      # Final image
+└── windows/
+    ├── base/                         # OS prerequisites, Chocolatey, Python
+    │   └── install-prerequisites.ps1 # Choco/PowerShell installation script
+    ├── source-prep/                  # Source checkout
+    ├── vs/                           # Visual Studio Build Tools
+    │   └── install-vs.py             # VS installation script
+    ├── source/                       # Run Setup.bat to download dependencies
+    │   └── patch-setup-win.py        # Setup script patcher
+    ├── builder/                      # Build UBT, create Installed Build
+    │   └── set-changelist.py         # Changelist injection utility
+    └── minimal/                      # Final image
+----
+
+== Requirements
+
+* **Docker** with Buildx enabled
+* **Git authentication token** - specify  `GIT_AUTH_TOKEN` environment variable as a secret to authenticate with the Unreal Engine repository
+* For Windows builds: a Docker daemon running on Windows or with Windows container support enabled
