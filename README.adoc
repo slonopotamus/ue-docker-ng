@@ -12,21 +12,21 @@ NOTE: This project is inspired by link:https://github.com/adamrehn/ue4-docker[ad
 == Features
 
 * **Multi-stage builds** - keep the final image lean by copying only the installed engine binaries.
-* **Cross-platform** - produces minimal images for both Linux and Windows.
+* **Multi-platform** - produces images for both Linux and Windows.
 * **Buildx Bake** - targets are defined in link:docker-bake.hcl[docker-bake.hcl], making builds reproducible and easy to customise.
 * **Configurable source** - switch the Unreal Engine repository and tag via variables.
 * **Compressed OCI images** - output images use zstd compression by default for smaller storage footprint.
 
 == Usage
 
-Build a Linux minimal image::
+Build a Linux image::
 +
 [source,bash]
 ----
 $ GIT_AUTH_TOKEN=<token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git linux-minimal
 ----
 
-Build a Windows minimal image::
+Build a Windows image::
 +
 [source,bash]
 ----
