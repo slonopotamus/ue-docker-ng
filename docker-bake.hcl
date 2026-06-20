@@ -161,6 +161,7 @@ target "linux-builder" {
   context     = "./linux/builder"
   contexts = {
     source : "target:linux-source"
+    shared = "./shared"
   }
   args = {
     changelist      = changelist
@@ -260,6 +261,7 @@ target "windows-builder" {
   context     = "./windows/builder"
   contexts = {
     source : "target:windows-source"
+    shared = "./shared"
   }
   args = {
     changelist      = changelist

@@ -101,12 +101,13 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 ----
 .
 ├── docker-bake.hcl                   # Buildx bake target definitions
+├── shared/
+│   └── set-changelist.py             # Changelist injection utility
 ├── linux/
 │   ├── base/                         # OS prerequisites, user setup
 │   │   └── install-prerequisites.sh  # Installation script
 │   ├── source/                       # Clone repo, run Setup.sh to download dependencies
 │   ├── builder/                      # Create Installed Build
-│   │   └── set-changelist.py         # Changelist injection utility
 │   └── minimal/                      # Final image
 └── windows/
     ├── base/                         # OS prerequisites, Chocolatey, Python
@@ -117,7 +118,6 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
     ├── source/                       # Run Setup.bat to download dependencies
     │   └── patch-setup-win.py        # Setup script patcher
     ├── builder/                      # Build UBT, create Installed Build
-    │   └── set-changelist.py         # Changelist injection utility
     └── minimal/                      # Final image
 ----
 

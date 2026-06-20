@@ -1,7 +1,7 @@
 FROM source
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
-COPY set-changelist.py /tmp/set-changelist.py
+COPY --from=shared set-changelist.py /tmp/set-changelist.py
 ARG changelist
 RUN python3 /tmp/set-changelist.py /home/ue/UnrealEngine/Engine/Build/Build.version $changelist
 
