@@ -122,5 +122,5 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 == Requirements
 
 * **Docker** with Buildx enabled
-* **Git authentication token** - specify  `GIT_AUTH_TOKEN` environment variable as a secret to authenticate with the Unreal Engine repository
+* **Git authentication token** - specify  `GIT_AUTH_TOKEN` environment variable to authenticate with the Unreal Engine repository
 * For Windows builds: a Docker daemon running on Windows or with Windows container support enabled
