@@ -123,6 +123,5 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 
 == Requirements
 
-* **Docker** with Buildx enabled
+* **Docker** 29 or later, with https://docs.docker.com/engine/storage/containerd/[containerd image storage] enabled
 * **Git authentication token** - specify  `GIT_AUTH_TOKEN` environment variable to authenticate with the Unreal Engine repository
-* For Windows builds: a Docker daemon running on Windows or with Windows container support enabled
