@@ -4,7 +4,7 @@ FROM source
 RUN if exist .git rmdir /s /q .git
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
-COPY set-changelist.py C:\\set-changelist.py
+COPY --from=shared set-changelist.py C:\\set-changelist.py
 ARG changelist
 RUN python C:/set-changelist.py C:/UnrealEngine/Engine/Build/Build.version %changelist%
 
