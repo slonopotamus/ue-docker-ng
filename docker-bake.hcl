@@ -7,7 +7,7 @@ variable "source-repository" {
 variable "source-tag" {
   description = "Git tag or branch to check out from the source repository"
   type        = string
-  default     = "5.7.3-release"
+  default     = "5.7.4-release"
 }
 
 variable "source-url" {
