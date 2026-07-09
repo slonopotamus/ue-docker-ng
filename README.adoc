@@ -9,6 +9,12 @@ This project uses Docker Buildx Bake for composable, cache-efficient builds.
 
 NOTE: This project is inspired by link:https://github.com/adamrehn/ue4-docker[adamrehn/ue4-docker].
 
+== Status
+
+Linux works.
+
+Windows is blocked by https://github.com/moby/moby/issues/53030.
+
 == Features
 
 * **Multi-stage builds** - keep the final image lean by copying only the installed engine binaries.
