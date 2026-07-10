@@ -73,11 +73,11 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 |Output configuration for the final images (type, mediatypes, compression, push, unpack)
 
 |`linux-setup-args`
-|`--exclude=Android --exclude=Mac --exclude=Win32 --exclude=Win64`
+|`[--exclude=Android --exclude=Mac --exclude=Win32 --exclude=Win64]`
 |Arguments passed to `Setup.sh` on Linux
 
 |`windows-setup-args`
-|`--exclude=Android --exclude=Mac --exclude=Linux`
+|`[--exclude=Android --exclude=Mac --exclude=Linux]`
 |Arguments passed to `Setup.bat` on Windows
 
 |`common-buildgraph-args`
