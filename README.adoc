@@ -5,7 +5,7 @@
 
 A modern, multi-stage Docker build pipeline for producing Unreal Engine editor images for Linux and Windows.
 
-This project uses Docker Buildx Bake for composable, cache-efficient builds.
+This project uses https://docs.docker.com/build/bake/[Docker Bake] for composable, cache-efficient builds.
 
 NOTE: This project is inspired by link:https://github.com/adamrehn/ue4-docker[adamrehn/ue4-docker].
 
