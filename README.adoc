@@ -11,9 +11,10 @@ NOTE: This project is inspired by link:https://github.com/adamrehn/ue4-docker[ue
 
 == Status
 
-Linux works.
+Linux:: Works
 
-Windows is blocked by https://github.com/moby/moby/issues/53030.
+Windows:: Requires https://github.com/moby/moby/issues/53030[a change to containerd that allows adjusting container storage size beyond the default 20 ]GB.
+Build your own containerd or use https://github.com/slonopotamus/containerd/releases[temporary fork] (installable via https://github.com/slonopotamus/stevedore[Stevedore]).
 
 == Features
 
@@ -22,6 +23,11 @@ Windows is blocked by https://github.com/moby/moby/issues/53030.
 * **Buildx Bake** - targets are defined in link:docker-bake.hcl[docker-bake.hcl], making builds reproducible and easy to customise.
 * **Configurable source** - switch the Unreal Engine repository and tag via variables.
 * **Compressed OCI images** - output images use zstd compression by default for smaller storage footprint.
+
+== Requirements
+
+* **Docker** with https://docs.docker.com/engine/storage/containerd/[containerd image storage] enabled
+* **Git authentication token** - specify  `GIT_AUTH_TOKEN` environment variable to authenticate with the Unreal Engine repository
 
 == Usage
 
@@ -134,8 +140,3 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
     │   └── set-changelist.py         # Changelist injection utility
     └── minimal/                      # Final image
 ----
-
-== Requirements
-
-* **Docker** 29 or later, with https://docs.docker.com/engine/storage/containerd/[containerd image storage] enabled
-* **Git authentication token** - specify  `GIT_AUTH_TOKEN` environment variable to authenticate with the Unreal Engine repository
