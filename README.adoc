@@ -68,6 +68,10 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 |`slonopotamus`
 |Docker image tag prefix
 
+|`image-outputs`
+|`[{ type = "image", oci-mediatypes = true, compression = "zstd", push = true, unpack = false }]`
+|Output configuration for the final images (type, mediatypes, compression, push, unpack)
+
 |`linux-setup-args`
 |`--exclude=Android --exclude=Mac --exclude=Win32 --exclude=Win64`
 |Arguments passed to `Setup.sh` on Linux
@@ -76,13 +80,17 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 |`--exclude=Android --exclude=Mac --exclude=Linux`
 |Arguments passed to `Setup.bat` on Windows
 
+|`common-buildgraph-args`
+|`[-set:HostPlatformOnly=true -set:WithClient=true -set:WithDDC=false -set:WithServer=true]`
+|Arguments passed to BuildGraph on all platforms
+
 |`linux-buildgraph-args`
 |(empty)
-|Extra flags appended to the Linux BuildGraph command
+|Extra flags appended to the Linux BuildGraph command (on top of `common-buildgraph-args`)
 
 |`windows-buildgraph-args`
 |(empty)
-|Extra flags appended to the Windows BuildGraph command
+|Extra flags appended to the Windows BuildGraph command (on top of `common-buildgraph-args`)
 
 |`linux-baseimage`
 |`docker-image://ubuntu:22.04`
