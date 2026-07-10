@@ -70,16 +70,29 @@ variable "windows-platforms" {
   ]
 }
 
+variable "common-buildgraph-args" {
+  description = "Additional arguments passed to the build graph on all platforms"
+  type = list(string)
+  default = [
+    "-set:HostPlatformOnly=true",
+    "-set:WithClient=true",
+    "-set:WithDDC=false",
+    "-set:WithServer=true",
+  ]
+}
+
 variable "linux-buildgraph-args" {
   description = "Additional arguments passed to the Linux build graph"
-  type        = string
-  default     = ""
+  type = list(string)
+  default = [
+  ]
 }
 
 variable "windows-buildgraph-args" {
   description = "Additional arguments passed to the Windows build graph"
-  type        = string
-  default     = ""
+  type = list(string)
+  default = [
+  ]
 }
 
 variable "linux-setup-args" {
@@ -163,8 +176,8 @@ target "linux-builder" {
     source : "target:linux-source"
   }
   args = {
-    changelist      = changelist
-    buildgraph_args = linux-buildgraph-args
+    changelist = changelist
+    buildgraph_args = join(" ", concat(common-buildgraph-args, linux-buildgraph-args))
   }
   output = [
     {
@@ -262,8 +275,8 @@ target "windows-builder" {
     source : "target:windows-source"
   }
   args = {
-    changelist      = changelist
-    buildgraph_args = windows-buildgraph-args
+    changelist = changelist
+    buildgraph_args = join(" ", concat(common-buildgraph-args, windows-buildgraph-args))
   }
   output = [
     {

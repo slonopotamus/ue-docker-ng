@@ -16,10 +16,6 @@ ARG buildgraph_args
 RUN Engine\Build\BatchFiles\RunUAT.bat BuildGraph \
 	-target="Make Installed Build Win64" \
 	-script=Engine/Build/InstalledEngineBuild.xml \
-	-set:HostPlatformOnly=true \
-	-set:WithClient=true \
-	-set:WithDDC=false \
-	-set:WithServer=true \
     %buildgraph_args% && \
 	(if exist LocalBuilds/InstalledDDC rmdir /s /q LocalBuilds/InstalledDDC) && \
 	rmdir /s /q Engine

@@ -21,10 +21,6 @@ ARG buildgraph_args
 RUN ./Engine/Build/BatchFiles/RunUAT.sh BuildGraph \
 	-target="Make Installed Build Linux" \
 	-script=Engine/Build/InstalledEngineBuild.xml \
-	-set:HostPlatformOnly=true \
-	-set:WithClient=true \
-	-set:WithDDC=false \
-	-set:WithServer=true \
     $buildgraph_args && \
 	rm -R -f ./LocalBuilds/InstalledDDC
 
