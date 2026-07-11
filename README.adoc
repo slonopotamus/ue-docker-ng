@@ -13,7 +13,7 @@ NOTE: This project is inspired by link:https://github.com/adamrehn/ue4-docker[ue
 
 Linux:: Works
 
-Windows:: Works, but requires https://github.com/moby/moby/issues/53030[a change to containerd that allows adjusting container storage size beyond the default 20 ]GB.
+Windows:: Works, but requires https://github.com/containerd/containerd/pull/13743[a change to containerd that allows adjusting container storage size beyond the default 20 ]GB.
 Build your own containerd or use https://github.com/slonopotamus/containerd/releases[temporary fork] (installable via https://github.com/slonopotamus/stevedore[Stevedore]).
 
 == Features
