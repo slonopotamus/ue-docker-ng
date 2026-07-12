@@ -9,13 +9,6 @@ This project uses https://docs.docker.com/build/bake/[Docker Bake] for composabl
 
 NOTE: This project is inspired by link:https://github.com/adamrehn/ue4-docker[ue4-docker].
 
-== Status
-
-Linux:: Works
-
-Windows:: Works, but requires https://github.com/containerd/containerd/pull/13743[a change to containerd that allows adjusting container storage size beyond the default 20 ]GB.
-Build your own containerd or use https://github.com/slonopotamus/containerd/releases[temporary fork] (installable via https://github.com/slonopotamus/stevedore[Stevedore]).
-
 == Features
 
 * **Multi-stage builds** - keep the final image lean by copying only the installed engine binaries.
@@ -24,10 +17,15 @@ Build your own containerd or use https://github.com/slonopotamus/containerd/rele
 * **Configurable source** - switch the Unreal Engine repository and tag via variables.
 * **Compressed OCI images** - output images use zstd compression by default for smaller storage footprint.
 
-== Requirements
+== Setup
 
-* **Docker** with https://docs.docker.com/engine/storage/containerd/[containerd image storage] enabled
-* **Git authentication token** - specify  `GIT_AUTH_TOKEN` environment variable to authenticate with the Unreal Engine repository
+. Install **Docker** with https://docs.docker.com/engine/storage/containerd/[containerd image storage] enabled.
++
+Windows requires https://github.com/containerd/containerd/pull/13743[a change to containerd] that allows adjusting container storage size beyond the default 20GB.
+Build your own containerd, or use https://github.com/slonopotamus/containerd/releases[temporary fork] installable via https://github.com/slonopotamus/stevedore[Stevedore].
++
+Ensure that containerd image storage is enabled: `docker info` output should contain `driver-type: io.containerd.snapshotter.v1` string.
+. https://github.com/settings/tokens[Generate authentication token] with `repo` scope to authenticate with the Unreal Engine repository.
 
 == Usage
 
@@ -35,14 +33,14 @@ Build a Linux image::
 +
 [source,bash]
 ----
-$ GIT_AUTH_TOKEN=<token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git linux-minimal
+$ GIT_AUTH_TOKEN=<auth token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git linux-minimal
 ----
 
 Build a Windows image::
 +
 [source,bash]
 ----
-$ GIT_AUTH_TOKEN=<token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git windows-minimal
+$ GIT_AUTH_TOKEN=<auth token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git windows-minimal
 ----
 
 === Variables
