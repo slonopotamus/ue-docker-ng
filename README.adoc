@@ -33,14 +33,14 @@ Build a Linux image::
 +
 [source,bash]
 ----
-$ GIT_AUTH_TOKEN=<auth token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git linux-minimal
+$ GIT_AUTH_TOKEN=<auth token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git#1.0.0 linux-minimal
 ----
 
 Build a Windows image::
 +
 [source,bash]
 ----
-$ GIT_AUTH_TOKEN=<auth token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git windows-minimal
+$ GIT_AUTH_TOKEN=<auth token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git#1.0.0 windows-minimal
 ----
 
 === Variables
