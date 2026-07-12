@@ -45,7 +45,7 @@ $ GIT_AUTH_TOKEN=<auth token> docker buildx bake https://github.com/slonopotamus
 
 === Variables
 
-All variables are defined in link:docker-bake.hcl[docker-bake.hcl] and can be overridden via environment variables::
+All variables are defined in link:docker-bake.hcl[docker-bake.hcl] and can be overridden via environment.
 
 [source,bash]
 ----
