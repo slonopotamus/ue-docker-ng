@@ -23,8 +23,24 @@ NOTE: ue-docker-ng is inspired by link:https://github.com/adamrehn/ue4-docker[ue
 +
 Windows requires https://github.com/containerd/containerd/pull/13743[a change to containerd] that allows adjusting container storage size beyond the default 20GB.
 Build your own containerd, or use https://github.com/slonopotamus/containerd/releases[temporary fork] installable via https://github.com/slonopotamus/stevedore[Stevedore].
+. Configure Docker to use containerd snapshotter (`/etc/docker/daemon.json` on Linux, `C:\ProgramData\Docker\config\daemon.json` on Windows:
 +
-Ensure that containerd image storage is enabled: `docker info` output should contain `driver-type: io.containerd.snapshotter.v1` string.
+[source,json]
+----
+{
+  "features": {
+    "containerd-snapshotter": true
+  }
+}
+----
+. (Windows only) Configure `C:\Program Files\containerd\config.toml`:
++
+[source,toml]
+----
+[plugins."io.containerd.snapshotter.v1.windows"]
+rootfs_size = "500GB"
+----
+. Ensure that containerd image storage is enabled: `docker info` output should contain `driver-type: io.containerd.snapshotter.v1` string.
 . https://github.com/settings/tokens[Generate authentication token] with `repo` scope to authenticate with the Unreal Engine repository.
 
 == Usage
