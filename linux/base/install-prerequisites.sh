@@ -15,6 +15,7 @@ apt-get install -y --no-install-recommends \
 		git \
 		git-lfs \
 		gpg-agent \
+		netbase \
 		python3 \
 		python3-dev \
 		python3-pip \
