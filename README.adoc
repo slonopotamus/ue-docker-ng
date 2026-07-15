@@ -121,7 +121,7 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 |Extra flags appended to the Windows BuildGraph command (on top of `common-buildgraph-args`)
 
 |`linux-baseimage`
-|`docker-image://ubuntu:22.04`
+|`docker-image://ubuntu:26.04`
 |Base image for Linux builds
 
 |`windows-baseimage`
