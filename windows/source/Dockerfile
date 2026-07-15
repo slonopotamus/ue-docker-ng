@@ -10,4 +10,4 @@ COPY patch-setup-win.py C:\\patch-setup-win.py
 RUN python C:/patch-setup-win.py Setup.bat
 
 ARG setup_args=""
-RUN Setup.bat -no-cache %setup_args%
+RUN --mount=type=cache,target=C:/UnrealEngine/.git/ue-gitdeps Setup.bat %setup_args%

@@ -5,6 +5,10 @@
 This document provides a high-level view of the changes to ue-docker-ng by release.
 For a detailed view of what has changed, refer to the {uri-project}/commits/main[commit history] on GitHub.
 
+== Unreleased
+
+* Enable caching of GitDependencies files
+
 == 1.0.0 (2026-07-12)
 
 Initial release.
