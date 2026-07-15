@@ -8,6 +8,9 @@ For a detailed view of what has changed, refer to the {uri-project}/commits/main
 == Unreleased
 
 * Enable caching of GitDependencies files
+* Switch Linux image base to Ubuntu 26.04
+* Remove `gpg-agent`, `python3-dev`, `python3-pip`, `software-properties-common` from Linux image
+* Change `ue` UID from 1000 to 1001 to prevent conflict with `ubuntu` user
 
 == 1.0.0 (2026-07-12)
 

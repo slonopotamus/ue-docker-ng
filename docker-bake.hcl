@@ -45,7 +45,7 @@ variable "image-outputs" {
 variable "linux-baseimage" {
   description = "Base Docker image used for Linux build (docker-image:// or local reference)"
   type        = string
-  default     = "docker-image://ubuntu:22.04"
+  default     = "docker-image://ubuntu:26.04"
 }
 
 variable "windows-baseimage" {
