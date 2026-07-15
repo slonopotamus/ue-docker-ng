@@ -3,8 +3,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-export DEBIAN_FRONTEND=noninteractive
-
 apt-get update
 
 # Install our build prerequisites
@@ -63,5 +61,3 @@ apt-get install -y --no-install-recommends \
 # (Starting in Unreal Engine 5.7, we need these installed before creating an Installed Build to prevent cooking failures)
 apt-get install -y --no-install-recommends \
 	libavahi-client3
-
-rm -rf /var/lib/apt/lists/*

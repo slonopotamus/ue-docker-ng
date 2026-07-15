@@ -7,8 +7,6 @@ COPY --from=source-prep C:\\UnrealEngine C:\\UnrealEngine
 COPY patch-setup-win.py C:\\patch-setup-win.py
 RUN python C:/patch-setup-win.py C:/UnrealEngine/Setup.bat
 
-# Run post-clone setup steps
-# (Note that the \-no-cache\ flag disables caching of dependency data in \.git/ue4-gitdeps\, saving disk space)
 ARG setup_args=""
 RUN C:/UnrealEngine/Setup.bat -no-cache %setup_args%
 

@@ -1,4 +1,4 @@
 FROM base
 
-ARG repository=""
+ARG repository
 ADD --keep-git-dir=true $repository C:/UnrealEngine
