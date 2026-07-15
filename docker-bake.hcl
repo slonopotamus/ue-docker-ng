@@ -194,9 +194,9 @@ target "windows-base" {
   platforms = windows-platforms
 }
 
-target "windows-source-prep" {
-  description = "Clones the Unreal Engine repository into the Windows image"
-  context     = "windows/source-prep"
+target "windows-vs" {
+  description = "Installs the Visual Studio workloads and components required by Unreal Engine"
+  context     = "windows/vs"
   contexts = {
     base : "target:windows-base"
   }
@@ -211,26 +211,21 @@ target "windows-source-prep" {
   platforms = windows-platforms
 }
 
-target "windows-vs" {
-  description = "Installs the Visual Studio workloads and components required by Unreal Engine"
-  context     = "windows/vs"
-  contexts = {
-    base : "target:windows-base"
-    source-prep : "target:windows-source-prep"
-  }
-  platforms = windows-platforms
-}
-
 target "windows-source" {
   description = "Runs Setup.bat to prepare the Windows engine source tree"
   context     = "windows/source"
   contexts = {
-    source-prep : "target:windows-source-prep"
     vs : "target:windows-vs"
   }
   args = {
+    repository = source-url
     setup_args = join(" ", windows-setup-args)
   }
+  secret = [
+    {
+      id : "GIT_AUTH_TOKEN"
+    }
+  ]
   platforms = windows-platforms
 }
 

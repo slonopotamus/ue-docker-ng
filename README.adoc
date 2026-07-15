@@ -154,10 +154,9 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 └── windows/
     ├── base/                         # OS prerequisites, Chocolatey, Python
     │   └── install-prerequisites.ps1 # Choco/PowerShell installation script
-    ├── source-prep/                  # Source checkout
     ├── vs/                           # Visual Studio Build Tools
     │   └── install-vs.py             # VS installation script
-    ├── source/                       # Run Setup.bat to download dependencies
+    ├── source/                       # Clone repo, run Setup.bat to download dependencies
     │   └── patch-setup-win.py        # Setup script patcher
     ├── builder/                      # Build UBT, create Installed Build
     └── minimal/                      # Final image

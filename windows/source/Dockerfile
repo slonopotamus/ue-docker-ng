@@ -1,6 +1,7 @@
 FROM vs
 
-COPY --from=source-prep C:\\UnrealEngine C:\\UnrealEngine
+ARG repository
+ADD --keep-git-dir=true $repository C:/UnrealEngine
 
 WORKDIR C:\\UnrealEngine
 
