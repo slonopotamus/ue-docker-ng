@@ -2,6 +2,13 @@
 :source-highlighter: rouge
 :icons: font
 :toc:
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :warning:
+:warning-caption: :warning:
+endif::[]
 
 A modern, multi-stage Docker build pipeline for producing Unreal Engine editor images for Linux and Windows.
 
