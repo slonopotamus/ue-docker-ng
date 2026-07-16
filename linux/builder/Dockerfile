@@ -5,9 +5,6 @@ COPY --from=shared set-changelist.py /tmp/set-changelist.py
 ARG changelist
 RUN python3 /tmp/set-changelist.py Engine/Build/Build.version $changelist
 
-# Remove the .git directory to disable UBT `git status` calls and speed up the build process
-RUN rm -rf .git
-
 # Disable Nuget package auditing (warnings NU1902 and NU1903)
 ENV NuGetAudit=false
 

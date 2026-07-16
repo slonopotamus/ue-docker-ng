@@ -1,8 +1,5 @@
 FROM source
 
-# Remove the .git directory to disable UBT `git status` calls and speed up the build process
-RUN if exist .git rmdir /s /q .git
-
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
 COPY --from=shared set-changelist.py C:\\set-changelist.py
 ARG changelist
