@@ -2,40 +2,29 @@
 
 import json
 import re
-import sys
-from os.path import dirname
+from pathlib import Path
 from subprocess import run, PIPE
+import sys
 
+version_file = Path(sys.argv[1])
+details = json.loads(version_file.read_text(encoding="utf-8"))
 
-def readFile(filename):
-    with open(filename, "rb") as f:
-        return f.read().decode("utf-8")
-
-
-def writeFile(filename, data):
-    with open(filename, "wb") as f:
-        f.write(data.encode("utf-8"))
-
-
-versionFile = sys.argv[1]
-details = json.loads(readFile(versionFile))
-
-changelistOverride = int(details["CompatibleChangelist"])
+changelist_override = int(details["CompatibleChangelist"])
 
 if sys.argv[2] == "auto":
-    if changelistOverride == 0:
+    if changelist_override == 0:
         # Attempt to retrieve the CL number from the git commit message
-        engineRoot = dirname(dirname(dirname(sys.argv[1])))
-        commitMessage = run(
+        engine_root = version_file.parent.parent
+        commit_message = run(
             ["git", "log", "-n", "1", "--format=%s%n%b"],
-            cwd=engineRoot,
+            cwd=engine_root,
             stdout=PIPE,
             stderr=PIPE,
             universal_newlines=True,
         ).stdout.strip()
 
         # If the commit is a tagged engine release then it won't have a CL number, and using "auto" is user error
-        if re.fullmatch("[0-9\\.]+ release", commitMessage) is not None:
+        if re.fullmatch("[0-9\\.]+ release", commit_message) is not None:
             print(
                 "Error: you are attempting to automatically retrieve the CL number for a tagged Unreal Engine release.\n"
                 "For hotfix releases of the Unreal Engine, a CL override is not required and should not be specified.\n"
@@ -45,21 +34,23 @@ if sys.argv[2] == "auto":
             sys.exit(1)
 
         # Attempt to extract the CL number from the commit message
-        match = re.search("\\[CL ([0-9]+) by .+ in .+ branch\\]", commitMessage)
+        match = re.search("\\[CL ([0-9]+) by .+ in .+ branch\\]", commit_message)
         if match is not None:
-            changelistOverride = int(match.group(1))
+            changelist_override = int(match.group(1))
         else:
             print(
                 "Error: failed to find a CL number in the git commit message! This was the commit message:\n\n"
-                + commitMessage,
+                + commit_message,
                 file=sys.stderr,
             )
             sys.exit(1)
 else:
-    changelistOverride = int(sys.argv[2])
+    changelist_override = int(sys.argv[2])
 
-details["Changelist"] = changelistOverride
+details["Changelist"] = changelist_override
 details["IsPromotedBuild"] = 1
-patchedJson = json.dumps(details, indent=4)
-writeFile(versionFile, patchedJson)
-print("PATCHED BUILD.VERSION:\n{}".format(patchedJson), file=sys.stderr)
+
+patched_json = json.dumps(details, indent=4)
+version_file.write_text(patched_json, encoding="utf-8")
+
+print("PATCHED BUILD.VERSION:\n{}".format(patched_json), file=sys.stderr)
