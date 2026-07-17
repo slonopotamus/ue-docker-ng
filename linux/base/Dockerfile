@@ -2,9 +2,9 @@ FROM base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-COPY --chmod=755 install-prerequisites.sh /tmp/
-RUN --mount=type=cache,target=/var/cache/apt \
-  --mount=type=cache,target=/var/lib/apt/lists \
+COPY --chmod=0755 install-prerequisites.sh /tmp/
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+  --mount=type=cache,sharing=locked,target=/var/lib/apt/lists \
   /tmp/install-prerequisites.sh
 
 RUN useradd --create-home --home /home/ue --shell /bin/bash --uid 1001 ue && \
