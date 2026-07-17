@@ -25,7 +25,7 @@ variable "changelist" {
 variable "tag-namespace" {
   description = "Docker image tag namespace (organization/name prefix) used for the final images"
   type        = string
-  default     = "slonopotamus"
+  default     = "slonopotamus/ue-docker-ng"
 }
 
 variable "image-outputs" {

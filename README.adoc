@@ -93,7 +93,7 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 |Override changelist number in `Build.version`; `auto` derives it from the tag
 
 |`tag-namespace`
-|`slonopotamus`
+|`slonopotamus/ue-docker-ng`
 |Docker image tag prefix
 
 |`image-outputs`
