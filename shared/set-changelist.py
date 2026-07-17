@@ -2,9 +2,9 @@
 
 import json
 import re
-from pathlib import Path
-from subprocess import run, PIPE
 import sys
+from pathlib import Path
+from subprocess import PIPE, run
 
 version_file = Path(sys.argv[1])
 details = json.loads(version_file.read_text(encoding="utf-8"))
@@ -20,11 +20,11 @@ if sys.argv[2] == "auto":
             cwd=engine_root,
             stdout=PIPE,
             stderr=PIPE,
-            universal_newlines=True,
+            text=True,
         ).stdout.strip()
 
         # If the commit is a tagged engine release then it won't have a CL number, and using "auto" is user error
-        if re.fullmatch("[0-9\\.]+ release", commit_message) is not None:
+        if re.fullmatch(r"[0-9.]+ release", commit_message) is not None:
             print(
                 "Error: you are attempting to automatically retrieve the CL number for a tagged Unreal Engine release.\n"
                 "For hotfix releases of the Unreal Engine, a CL override is not required and should not be specified.\n"
@@ -34,7 +34,7 @@ if sys.argv[2] == "auto":
             sys.exit(1)
 
         # Attempt to extract the CL number from the commit message
-        match = re.search("\\[CL ([0-9]+) by .+ in .+ branch\\]", commit_message)
+        match = re.search(r"\[CL ([0-9]+) by .+ in .+ branch\]", commit_message)
         if match is not None:
             changelist_override = int(match.group(1))
         else:
@@ -53,4 +53,4 @@ details["IsPromotedBuild"] = 1
 patched_json = json.dumps(details, indent=4)
 version_file.write_text(patched_json, encoding="utf-8")
 
-print("PATCHED BUILD.VERSION:\n{}".format(patched_json), file=sys.stderr)
+print(f"PATCHED BUILD.VERSION:\n{patched_json}", file=sys.stderr)

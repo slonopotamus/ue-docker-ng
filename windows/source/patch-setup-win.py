@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 setup_script = Path(sys.argv[1])
 
@@ -20,4 +20,4 @@ code = code.replace("pause", "@rem pause")
 setup_script.write_text(code, encoding="utf-8")
 
 # Print the patched code to stderr for debug purposes
-print("PATCHED {}:\n\n{}".format(setup_script, code), file=sys.stderr)
+print(f"PATCHED {setup_script}:\n\n{code}", file=sys.stderr)
