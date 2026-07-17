@@ -1,36 +1,23 @@
 #!/usr/bin/env python3
-import os, sys
 
+from pathlib import Path
+import sys
 
-def readFile(filename):
-    with open(filename, "rb") as f:
-        return f.read().decode("utf-8")
+setup_script = Path(sys.argv[1])
 
+code = setup_script.read_text(encoding="utf-8")
 
-def writeFile(filename, data):
-    with open(filename, "wb") as f:
-        f.write(data.encode("utf-8"))
-
-
-# Comment out the call to the UE4 prereqs installer in Setup.bat
-PREREQ_CALL = "start /wait Engine\\Extras\\Redist\\en-us\\UE4PrereqSetup_x64.exe"
-setupScript = sys.argv[1]
-code = readFile(setupScript)
-code = code.replace(
-    "echo Installing prerequisites...", "echo (Skipping installation of prerequisites)"
-)
-code = code.replace(PREREQ_CALL, "@rem " + PREREQ_CALL)
-
-# Also comment out the version selector call, since we don't need shell integration
-SELECTOR_CALL = (
+# Comment out the version selector call, since we don't need shell integration
+selector_call = (
     ".\\Engine\\Binaries\\Win64\\UnrealVersionSelector-Win64-Shipping.exe /register"
 )
-code = code.replace(SELECTOR_CALL, "@rem " + SELECTOR_CALL)
+code = code.replace(selector_call, "@rem " + selector_call)
 
 # Add output so we can see when script execution is complete, and ensure `pause` is not called on error
 code = code.replace("rem Done!", "echo Done!\r\nexit /b 0")
 code = code.replace("pause", "@rem pause")
-writeFile(setupScript, code)
+
+setup_script.write_text(code, encoding="utf-8")
 
 # Print the patched code to stderr for debug purposes
-print("PATCHED {}:\n\n{}".format(setupScript, code), file=sys.stderr)
+print("PATCHED {}:\n\n{}".format(setup_script, code), file=sys.stderr)
