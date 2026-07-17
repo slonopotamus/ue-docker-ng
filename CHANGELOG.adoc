@@ -5,7 +5,7 @@
 This document provides a high-level view of the changes to ue-docker-ng by release.
 For a detailed view of what has changed, refer to the {uri-project}/commits/main[commit history] on GitHub.
 
-== Unreleased
+== 1.1.0 (2026-07-17)
 
 * Enable caching of GitDependencies files
 * Switch Linux image base to Ubuntu 26.04
