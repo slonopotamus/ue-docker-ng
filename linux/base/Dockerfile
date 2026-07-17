@@ -1,4 +1,4 @@
-FROM baseimage
+FROM base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
