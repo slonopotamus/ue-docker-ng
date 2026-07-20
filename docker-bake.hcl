@@ -259,7 +259,3 @@ target "windows-minimal" {
   output    = image-outputs
   platforms = windows-platforms
 }
-
-group "default" {
-  targets = ["linux-minimal"]
-}
