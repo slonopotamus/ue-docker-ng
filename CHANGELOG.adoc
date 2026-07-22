@@ -8,6 +8,7 @@ For a detailed view of what has changed, refer to the {uri-project}/commits/main
 == Unreleased
 
 * Remove default target
+* Improve engine changelist auto-detection
 
 == 1.1.0 (2026-07-17)
 

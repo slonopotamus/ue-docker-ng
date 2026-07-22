@@ -6,48 +6,51 @@ import sys
 from pathlib import Path
 from subprocess import PIPE, run
 
+# The Perforce changelist numbers for .0 releases of the Unreal Engine
+UNREAL_ENGINE_RELEASE_CHANGELISTS = {
+    "4.27.0": 17155196,
+    "5.0.0": 19505902,
+    "5.1.0": 23058290,
+    "5.2.0": 25360045,
+    "5.3.0": 27405482,
+    "5.4.0": 33043543,
+    "5.5.0": 37670630,
+    "5.6.0": 43139311,
+    "5.7.0": 47537391,
+    "5.8.0": 55116800,
+}
+
 version_file = Path(sys.argv[1])
 details = json.loads(version_file.read_text(encoding="utf-8"))
 
-changelist_override = int(details["CompatibleChangelist"])
-
 if sys.argv[2] == "auto":
-    if changelist_override == 0:
-        # Attempt to retrieve the CL number from the git commit message
-        engine_root = version_file.parent.parent
+    if int(details["CompatibleChangelist"]) == 0:
         commit_message = run(
             ["git", "log", "-n", "1", "--format=%s%n%b"],
-            cwd=engine_root,
+            cwd=version_file.parent,
             stdout=PIPE,
             stderr=PIPE,
             text=True,
+            check=True,
         ).stdout.strip()
 
-        # If the commit is a tagged engine release then it won't have a CL number, and using "auto" is user error
-        if re.fullmatch(r"[0-9.]+ release", commit_message) is not None:
-            print(
-                "Error: you are attempting to automatically retrieve the CL number for a tagged Unreal Engine release.\n"
-                "For hotfix releases of the Unreal Engine, a CL override is not required and should not be specified.\n"
-                "For supported .0 releases of the Unreal Engine, ue4-docker ships with known CL numbers, so an override should not be necessary.",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-
-        # Attempt to extract the CL number from the commit message
         match = re.search(r"\[CL ([0-9]+) by .+ in .+ branch\]", commit_message)
+
         if match is not None:
-            changelist_override = int(match.group(1))
+            details["Changelist"] = int(match.group(1))
+        elif re.fullmatch(r"[0-9.]+ release", commit_message) is not None:
+            details["Changelist"] = UNREAL_ENGINE_RELEASE_CHANGELISTS[
+                f"{details["MajorVersion"]}.{details["MinorVersion"]}.{details["PatchVersion"]}"
+            ]
         else:
             print(
-                "Error: failed to find a CL number in the git commit message! This was the commit message:\n\n"
-                + commit_message,
+                "Error: unable to auto-detect Changelist value for Engine/Build/Build.version, specify explicitly",
                 file=sys.stderr,
             )
             sys.exit(1)
 else:
-    changelist_override = int(sys.argv[2])
+    details["Changelist"] = int(sys.argv[2])
 
-details["Changelist"] = changelist_override
 details["IsPromotedBuild"] = 1
 
 patched_json = json.dumps(details, indent=4)

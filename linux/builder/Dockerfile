@@ -2,7 +2,7 @@ FROM source
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
 COPY --from=shared set-changelist.py /tmp/set-changelist.py
-ARG changelist
+ARG changelist=""
 RUN python3 /tmp/set-changelist.py Engine/Build/Build.version $changelist
 
 # Disable Nuget package auditing (warnings NU1902 and NU1903)
