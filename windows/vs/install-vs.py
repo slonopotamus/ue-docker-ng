@@ -18,15 +18,9 @@ vs2022_components = common_components + [
 ]
 
 
-def build_vs_channel_url(vs_version: str) -> str:
-    version_major = vs_version.split(".", 1)[0]
-    return f"https://aka.ms/vs/{version_major}/release.ltsc.{vs_version}/channel"
-
-
 class VisualStudio:
-    def __init__(self, version: str, channel_url: str, components: list[str]):
+    def __init__(self, version: str, components: list[str]):
         self.version = version
-        self.channel_url = channel_url
         self.components = sorted(set(components))
 
     @classmethod
@@ -48,7 +42,6 @@ class VisualStudio:
 
         return cls(
             vs_version,
-            build_vs_channel_url(vs_version),
             components,
         )
 
@@ -63,8 +56,6 @@ class VisualStudio:
             installer_path,
             "--quiet",
             "--wait",
-            "--channelUri",
-            self.channel_url,
             "--productId",
             "Microsoft.VisualStudio.Product.BuildTools",
             "--norestart",

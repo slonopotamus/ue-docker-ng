@@ -9,6 +9,8 @@ For a detailed view of what has changed, refer to the {uri-project}/commits/main
 
 * Remove default target
 * Improve engine changelist auto-detection
+* Always use latest Visual Studio channel.
+It is impossible to determine which VS version UE wants from `Windows_SDK.json`.
 
 == 1.1.0 (2026-07-17)
 
