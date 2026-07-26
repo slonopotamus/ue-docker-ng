@@ -136,7 +136,7 @@ target "linux-base" {
   description = "Installs Linux system dependencies required by the Unreal Engine"
   context     = "./linux/base"
   contexts = {
-    base = linux-baseimage
+    base : linux-baseimage
   }
   platforms = linux-platforms
 }
@@ -189,7 +189,7 @@ target "windows-base" {
   description = "Installs Windows system dependencies and prerequisites for the Unreal Engine"
   context     = "windows/base"
   contexts = {
-    base = windows-baseimage
+    base : windows-baseimage
   }
   platforms = windows-platforms
 }
