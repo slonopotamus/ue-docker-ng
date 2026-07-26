@@ -153,7 +153,7 @@ target "linux-source" {
   }
   secret = [
     {
-      id : "GIT_AUTH_TOKEN"
+      id = "GIT_AUTH_TOKEN"
     }
   ]
   platforms = linux-platforms
@@ -177,7 +177,7 @@ target "linux-minimal" {
   description = "Final Linux image assembled from base and builder layers; tagged and pushed"
   context     = "./linux/minimal"
   contexts = {
-    base = "target:linux-base"
+    base    = "target:linux-base"
     builder = "target:linux-builder"
   }
   tags      = linux-minimal-tags
@@ -215,7 +215,7 @@ target "windows-vs" {
   description = "Installs the Visual Studio workloads and components required by Unreal Engine"
   context     = "windows/vs"
   contexts = {
-    base = "target:windows-base"
+    base        = "target:windows-base"
     source-prep = "target:windows-source-prep"
   }
   platforms = windows-platforms
@@ -226,7 +226,7 @@ target "windows-source" {
   context     = "windows/source"
   contexts = {
     source-prep = "target:windows-source-prep"
-    vs = "target:windows-vs"
+    vs          = "target:windows-vs"
   }
   args = {
     setup_args = join(" ", windows-setup-args)
@@ -253,7 +253,7 @@ target "windows-minimal" {
   context     = "windows/minimal"
   contexts = {
     builder = "target:windows-builder"
-    vs = "target:windows-vs"
+    vs      = "target:windows-vs"
   }
   tags      = windows-minimal-tags
   output    = image-outputs
