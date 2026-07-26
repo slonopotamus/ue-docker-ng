@@ -198,7 +198,8 @@ target "windows-source-prep" {
   description = "Clones the Unreal Engine repository into the Windows image"
   context     = "windows/source-prep"
   contexts = {
-    base = windows-baseimage
+    # TODO: This should be windows-baseimage, but it breaks for some reason
+    base = "target:windows-base"
   }
   args = {
     repository = source-url
