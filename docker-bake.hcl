@@ -136,7 +136,7 @@ target "linux-base" {
   description = "Installs Linux system dependencies required by the Unreal Engine"
   context     = "./linux/base"
   contexts = {
-    base : linux-baseimage
+    base = linux-baseimage
   }
   platforms = linux-platforms
 }
@@ -145,7 +145,7 @@ target "linux-source" {
   description = "Clones the Unreal Engine repository and runs Setup.sh to prepare the source tree"
   context     = "./linux/source"
   contexts = {
-    base : "target:linux-base"
+    base = "target:linux-base"
   }
   args = {
     repository = source-url
@@ -163,7 +163,7 @@ target "linux-builder" {
   description = "Runs build graph to build installed engine for Linux"
   context     = "./linux/builder"
   contexts = {
-    source : "target:linux-source"
+    source = "target:linux-source"
     shared = "./shared"
   }
   args = {
@@ -177,8 +177,8 @@ target "linux-minimal" {
   description = "Final Linux image assembled from base and builder layers; tagged and pushed"
   context     = "./linux/minimal"
   contexts = {
-    base : "target:linux-base"
-    builder : "target:linux-builder"
+    base = "target:linux-base"
+    builder = "target:linux-builder"
   }
   tags      = linux-minimal-tags
   output    = image-outputs
@@ -189,7 +189,7 @@ target "windows-base" {
   description = "Installs Windows system dependencies and prerequisites for the Unreal Engine"
   context     = "windows/base"
   contexts = {
-    base : windows-baseimage
+    base = windows-baseimage
   }
   platforms = windows-platforms
 }
@@ -198,7 +198,7 @@ target "windows-source-prep" {
   description = "Clones the Unreal Engine repository into the Windows image"
   context     = "windows/source-prep"
   contexts = {
-    base : windows-baseimage
+    base = windows-baseimage
   }
   args = {
     repository = source-url
@@ -215,8 +215,8 @@ target "windows-vs" {
   description = "Installs the Visual Studio workloads and components required by Unreal Engine"
   context     = "windows/vs"
   contexts = {
-    base : "target:windows-base"
-    source-prep : "target:windows-source-prep"
+    base = "target:windows-base"
+    source-prep = "target:windows-source-prep"
   }
   platforms = windows-platforms
 }
@@ -225,8 +225,8 @@ target "windows-source" {
   description = "Runs Setup.bat to prepare the Windows engine source tree"
   context     = "windows/source"
   contexts = {
-    source-prep : "target:windows-source-prep"
-    vs : "target:windows-vs"
+    source-prep = "target:windows-source-prep"
+    vs = "target:windows-vs"
   }
   args = {
     setup_args = join(" ", windows-setup-args)
@@ -238,7 +238,7 @@ target "windows-builder" {
   description = "Runs build graph to produce installed engine for Windows"
   context     = "./windows/builder"
   contexts = {
-    source : "target:windows-source"
+    source = "target:windows-source"
     shared = "./shared"
   }
   args = {
@@ -252,8 +252,8 @@ target "windows-minimal" {
   description = "Final Windows image assembled from builder and VS layers; tagged and pushed"
   context     = "windows/minimal"
   contexts = {
-    builder : "target:windows-builder"
-    vs : "target:windows-vs"
+    builder = "target:windows-builder"
+    vs = "target:windows-vs"
   }
   tags      = windows-minimal-tags
   output    = image-outputs
