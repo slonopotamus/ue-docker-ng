@@ -73,7 +73,7 @@ All variables are defined in link:docker-bake.hcl[docker-bake.hcl] and can be ov
 
 [source,bash]
 ----
-$ source-tag=5.8.0-release docker buildx bake linux-minimal
+$ source-tag=5.8.1-release docker buildx bake linux-minimal
 ----
 
 [cols="2,1,2"]
@@ -85,7 +85,7 @@ $ source-tag=5.8.0-release docker buildx bake linux-minimal
 |Git URL for the Unreal Engine source
 
 |`source-tag`
-|`5.7.4-release`
+|`5.8.1-release`
 |Git tag or branch to checkout
 
 |`changelist`
