@@ -7,7 +7,8 @@ For a detailed view of what has changed, refer to the {uri-project}/commits/main
 
 == Unreleased
 
-* Use 5.8.1 Unreal Engine by default
+* Build Unreal Engine 5.8.1 by default
+* Use all cores when building Unreal Engine
 
 == 1.2.3 (2026-07-28)
 

@@ -1,5 +1,7 @@
 FROM source
 
+COPY --from=shared BuildConfiguration.xml /home/ue/.config/UnrealEngine/UnrealBuildTool/
+
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
 COPY --from=shared set-changelist.py /tmp/set-changelist.py
 ARG changelist=""
