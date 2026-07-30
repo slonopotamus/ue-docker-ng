@@ -1,9 +1,9 @@
 FROM source
 
-COPY --from=shared ["BuildConfiguration.xml", "C:\Users\ContainerAdministrator\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml"]
+COPY --from=shared ["BuildConfiguration.xml", "C:\\Users\\ContainerAdministrator\\AppData\\Roaming\\Unreal Engine\\UnrealBuildTool\\BuildConfiguration.xml"]
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
-COPY --from=shared ["set-changelist.py", "C:\set-changelist.py"]
+COPY --from=shared set-changelist.py C:\\set-changelist.py
 ARG changelist
 RUN python C:/set-changelist.py C:/UnrealEngine/Engine/Build/Build.version %changelist%
 
