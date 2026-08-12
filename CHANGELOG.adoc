@@ -5,6 +5,11 @@
 This document provides a high-level view of the changes to ue-docker-ng by release.
 For a detailed view of what has changed, refer to the {uri-project}/commits/main[commit history] on GitHub.
 
+== Unreleased
+
+* *Breaking change* Images are no longer pushed to remote registry by default.
+Use `docker buildx bake --push` if you want to push images.
+
 == 1.2.4 (2026-08-11)
 
 * Build Unreal Engine 5.8.1 by default

@@ -36,7 +36,6 @@ variable "image-outputs" {
       type           = "image"
       oci-mediatypes = true
       compression    = "zstd"
-      push           = true
       unpack         = false
     }
   ]
@@ -138,6 +137,11 @@ target "linux-base" {
   contexts = {
     base = linux-baseimage
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = linux-platforms
 }
 
@@ -156,6 +160,11 @@ target "linux-source" {
       id = "GIT_AUTH_TOKEN"
     }
   ]
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = linux-platforms
 }
 
@@ -170,6 +179,11 @@ target "linux-builder" {
     changelist = changelist
     buildgraph_args = join(" ", concat(common-buildgraph-args, linux-buildgraph-args))
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = linux-platforms
 }
 
@@ -191,6 +205,11 @@ target "windows-base" {
   contexts = {
     base = windows-baseimage
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
@@ -206,7 +225,12 @@ target "windows-source-prep" {
   }
   secret = [
     {
-      id : "GIT_AUTH_TOKEN"
+      id = "GIT_AUTH_TOKEN"
+    }
+  ]
+  output = [
+    {
+      type = "cacheonly"
     }
   ]
   platforms = windows-platforms
@@ -219,6 +243,11 @@ target "windows-vs" {
     base        = "target:windows-base"
     source-prep = "target:windows-source-prep"
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
@@ -232,6 +261,11 @@ target "windows-source" {
   args = {
     setup_args = join(" ", windows-setup-args)
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
@@ -246,6 +280,11 @@ target "windows-builder" {
     changelist = changelist
     buildgraph_args = join(" ", concat(common-buildgraph-args, windows-buildgraph-args))
   }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
   platforms = windows-platforms
 }
 
