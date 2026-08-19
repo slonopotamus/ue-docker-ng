@@ -301,7 +301,7 @@ target "windows-minimal" {
 }
 
 target "linux-ipv6-test" {
-  context     = "linux/test/ipv6"
+  context = "linux/test/ipv6"
   output = [
     {
       type = "cacheonly"
@@ -317,7 +317,7 @@ group "linux-test" {
 }
 
 target "windows-20gb-test" {
-  context     = "windows/test/20gb"
+  context = "windows/test/20gb"
   contexts = {
     base = windows-baseimage
   }
