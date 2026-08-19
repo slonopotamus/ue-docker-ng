@@ -299,3 +299,38 @@ target "windows-minimal" {
   output    = image-outputs
   platforms = windows-platforms
 }
+
+target "linux-ipv6-test" {
+  context     = "linux/test/ipv6"
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
+  platforms = linux-platforms
+}
+
+group "linux-test" {
+  targets = [
+    "linux-ipv6-test"
+  ]
+}
+
+target "windows-20gb-test" {
+  context     = "windows/test/20gb"
+  contexts = {
+    base = windows-baseimage
+  }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
+  platforms = windows-platforms
+}
+
+group "windows-test" {
+  targets = [
+    "windows-20gb-test"
+  ]
+}

@@ -67,6 +67,9 @@ Build a Windows image::
 $ GIT_AUTH_TOKEN=<auth token> docker buildx bake --policy disabled=true https://github.com/slonopotamus/ue-docker-ng.git#1.2.4 windows-minimal
 ----
 
+NOTE: Images are not pushed to a remote registry by default.
+Add `--push` to `docker buildx bake` to push the built images.
+
 === Variables
 
 All variables are defined in link:docker-bake.hcl[docker-bake.hcl] and can be overridden via environment.
@@ -97,7 +100,7 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 |Docker image tag prefix
 
 |`image-outputs`
-|`[{ type = "image", oci-mediatypes = true, compression = "zstd", push = true, unpack = false }]`
+|`[{ type = "image", oci-mediatypes = true, compression = "zstd", unpack = false }]`
 |Output configuration for the final images (type, mediatypes, compression, push, unpack)
 
 |`linux-setup-args`
@@ -144,13 +147,16 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 .
 ├── docker-bake.hcl                   # Buildx bake target definitions
 ├── shared/
+│   ├── BuildConfiguration.xml        # UBT configuration
 │   └── set-changelist.py             # Changelist injection utility
 ├── linux/
 │   ├── base/                         # OS prerequisites, user setup
 │   │   └── install-prerequisites.sh  # Installation script
 │   ├── source/                       # Clone repo, run Setup.sh to download dependencies
 │   ├── builder/                      # Create Installed Build
-│   └── minimal/                      # Final image
+│   ├── minimal/                      # Final image
+│   └── test/
+│       └── ipv6/                     # IPv6 connectivity smoke test
 └── windows/
     ├── base/                         # OS prerequisites, Chocolatey, Python
     │   └── install-prerequisites.ps1 # Choco/PowerShell installation script
@@ -160,5 +166,7 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
     ├── source/                       # Run Setup.bat to download dependencies
     │   └── patch-setup-win.py        # Setup script patcher
     ├── builder/                      # Build UBT, create Installed Build
-    └── minimal/                      # Final image
+    ├── minimal/                      # Final image
+    └── test/
+        └── 20gb/                     # Large-file (20GB) copy smoke test
 ----
