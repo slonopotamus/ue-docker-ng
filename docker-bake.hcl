@@ -73,10 +73,7 @@ variable "common-buildgraph-args" {
   description = "Additional arguments passed to the build graph on all platforms"
   type = list(string)
   default = [
-    "-set:HostPlatformOnly=true",
-    "-set:WithClient=true",
-    "-set:WithDDC=false",
-    "-set:WithServer=true",
+    "-set:HostPlatformOnly=true", "-set:WithClient=true", "-set:WithDDC=false", "-set:WithServer=true",
   ]
 }
 
@@ -98,10 +95,7 @@ variable "linux-setup-args" {
   description = "Arguments passed to Setup.sh during Linux engine setup (e.g., '--exclude=Android')"
   type = list(string)
   default = [
-    "--exclude=Android",
-    "--exclude=Mac",
-    "--exclude=Win32",
-    "--exclude=Win64",
+    "--exclude=Android", "--exclude=Mac", "--exclude=Win32", "--exclude=Win64",
   ]
 }
 
@@ -109,9 +103,7 @@ variable "windows-setup-args" {
   description = "Arguments passed to Setup.bat during Windows engine setup (e.g., '--exclude=Android')"
   type = list(string)
   default = [
-    "--exclude=Android",
-    "--exclude=Mac",
-    "--exclude=Linux",
+    "--exclude=Android", "--exclude=Mac", "--exclude=Linux",
   ]
 }
 
@@ -133,7 +125,7 @@ variable "windows-minimal-tags" {
 
 target "linux-base" {
   description = "Installs Linux system dependencies required by the Unreal Engine"
-  context     = "./linux/base"
+  context     = "linux/base"
   contexts = {
     base = linux-baseimage
   }
@@ -147,7 +139,7 @@ target "linux-base" {
 
 target "linux-source" {
   description = "Clones the Unreal Engine repository and runs Setup.sh to prepare the source tree"
-  context     = "./linux/source"
+  context     = "linux/source"
   contexts = {
     base = "target:linux-base"
   }
@@ -170,10 +162,10 @@ target "linux-source" {
 
 target "linux-builder" {
   description = "Runs build graph to build installed engine for Linux"
-  context     = "./linux/builder"
+  context     = "linux/builder"
   contexts = {
     source = "target:linux-source"
-    shared = "./shared"
+    shared = "shared"
   }
   args = {
     changelist = changelist
@@ -189,7 +181,7 @@ target "linux-builder" {
 
 target "linux-minimal" {
   description = "Final Linux image assembled from base and builder layers; tagged and pushed"
-  context     = "./linux/minimal"
+  context     = "linux/minimal"
   contexts = {
     base    = "target:linux-base"
     builder = "target:linux-builder"
@@ -271,10 +263,10 @@ target "windows-source" {
 
 target "windows-builder" {
   description = "Runs build graph to produce installed engine for Windows"
-  context     = "./windows/builder"
+  context     = "windows/builder"
   contexts = {
     source = "target:windows-source"
-    shared = "./shared"
+    shared = "shared"
   }
   args = {
     changelist = changelist
