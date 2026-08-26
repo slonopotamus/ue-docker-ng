@@ -5,7 +5,7 @@
 This document provides a high-level view of the changes to ue-docker-ng by release.
 For a detailed view of what has changed, refer to the {uri-project}/commits/main[commit history] on GitHub.
 
-== 1.2.5 (2026-08-26)
+== 2.0.0 (2026-08-26)
 
 * *Breaking change* Images are no longer pushed to remote registry by default.
 Use `docker buildx bake --push` if you want to push images.
