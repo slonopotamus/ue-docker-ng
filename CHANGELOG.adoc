@@ -5,6 +5,10 @@
 This document provides a high-level view of the changes to ue-docker-ng by release.
 For a detailed view of what has changed, refer to the {uri-project}/commits/main[commit history] on GitHub.
 
+== 2.1.1 (2026-09-06)
+
+* Fix handling of `set-changelist.py` on Windows
+
 == 2.1.0 (2026-09-06)
 
 * Build UbaHost so if there are code changes, they are properly applied to installed engine.
