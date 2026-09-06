@@ -2,7 +2,7 @@
 :source-highlighter: rouge
 :icons: font
 :toc:
-:version: 2.0.0
+:version: 2.1.0
 ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
