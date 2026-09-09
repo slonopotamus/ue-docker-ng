@@ -14,7 +14,7 @@ RUN ./Engine/Build/BatchFiles/BuildUBT.sh
 
 # I'd like to call Engine/Source/Programs/UnrealBuildAccelerator/Deploy-Linux.sh here, but it is just broken
 RUN if [ -f Engine/Source/Programs/UnrealBuildAccelerator/UbaHost.Target.cs ]; then \
-      ./Engine/Build/BatchFiles/RunUBT.sh -NoUba -NoUbaLocal UbaHost Linux Shipping \
+      ./Engine/Build/BatchFiles/RunUBT.sh -NoUba -NoUbaLocal UbaHost Linux Shipping; \
     fi
 
 # Create an Installed Build of the Engine
