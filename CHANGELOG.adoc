@@ -5,6 +5,10 @@
 This document provides a high-level view of the changes to ue-docker-ng by release.
 For a detailed view of what has changed, refer to the {uri-project}/commits/main[commit history] on GitHub.
 
+== Unreleased
+
+* Add `BuildIdOverride` support (https://github.com/slonopotamus/ue-docker-ng/issues/11[#11])
+
 == 2.1.2 (2026-09-09)
 
 * Fix multiline expression bug on Linux
