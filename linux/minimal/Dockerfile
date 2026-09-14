@@ -4,4 +4,4 @@ COPY --from=builder --chown=ue:ue /home/ue/UnrealEngine/LocalBuilds/Engine/Linux
 WORKDIR /home/ue/UnrealEngine
 RUN ue_version="$(<Engine/Build/InstalledBuild.txt)" && \
     mkdir -p /home/ue/.config/Epic/UnrealEngine/ && \
-    echo "[Installations]\n${ue_version}=/home/ue/UnrealEngine" >/home/ue/.config/Epic/UnrealEngine/Install.ini
+    printf "[Installations]\n${ue_version}=/home/ue/UnrealEngine\n" >/home/ue/.config/Epic/UnrealEngine/Install.ini
