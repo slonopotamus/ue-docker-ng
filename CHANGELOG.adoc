@@ -5,6 +5,10 @@
 This document provides a high-level view of the changes to ue-docker-ng by release.
 For a detailed view of what has changed, refer to the {uri-project}/commits/main[commit history] on GitHub.
 
+== 2.2.1 (2026-09-14)
+
+* Fix Unreal Engine version not properly passed to Install.ini on Linux
+
 == 2.2.0 (2026-09-14)
 
 * Add `BuildIdOverride` support (https://github.com/slonopotamus/ue-docker-ng/issues/11[#11])
