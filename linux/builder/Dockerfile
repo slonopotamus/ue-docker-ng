@@ -1,6 +1,6 @@
 FROM source
 
-COPY --from=shared BuildConfiguration.xml /home/ue/.config/UnrealEngine/UnrealBuildTool/
+COPY --from=shared ["BuildConfiguration.xml", "/home/ue/.config/Unreal Engine/UnrealBuildTool/"]
 
 # Set the changelist number in Build.version
 COPY --from=shared set-changelist.py /tmp/

@@ -8,6 +8,7 @@ For a detailed view of what has changed, refer to the {uri-project}/commits/main
 == Unreleased
 
 * Add `BuildIdOverride` support (https://github.com/slonopotamus/ue-docker-ng/issues/11[#11])
+* Fix `bAllCores=true` not applied on Linux
 
 == 2.1.2 (2026-09-09)
 
