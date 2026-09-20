@@ -92,6 +92,10 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 |`5.8.1-release`
 |Git tag or branch to checkout
 
+|`source-url`
+|`<source-repository>#<source-tag>`
+|Full source reference composed of repository and tag
+
 |`changelist`
 |`auto`
 |Override changelist number in `Build.version`; `auto` derives it from the tag
@@ -99,6 +103,14 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 |`tag-namespace`
 |`slonopotamus/ue-docker-ng`
 |Docker image tag prefix
+
+|`linux-minimal-tags`
+|`<tag-namespace>/minimal:<source-tag>-linux`
+|Docker tags applied to the final Linux image
+
+|`windows-minimal-tags`
+|`<tag-namespace>/minimal:<source-tag>-windows`
+|Docker tags applied to the final Windows image
 
 |`image-outputs`
 |`[{ type = "image", oci-mediatypes = true, compression = "zstd", unpack = false }]`
@@ -149,6 +161,7 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 ├── docker-bake.hcl                   # Buildx bake target definitions
 ├── shared/
 │   ├── BuildConfiguration.xml        # UBT configuration
+│   ├── make-build-id-override.py     # Derives BuildId override from Build.version
 │   └── set-changelist.py             # Changelist injection utility
 ├── linux/
 │   ├── base/                         # OS prerequisites, user setup
