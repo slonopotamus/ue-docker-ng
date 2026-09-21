@@ -98,7 +98,7 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 
 |`changelist`
 |`auto`
-|Override changelist number in `Build.version`; `auto` derives it from the tag
+|Override changelist number in `Build.version`; `auto` detects it from the source commit
 
 |`tag-namespace`
 |`slonopotamus/ue-docker-ng`
