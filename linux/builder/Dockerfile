@@ -5,7 +5,7 @@ COPY --from=shared ["BuildConfiguration.xml", "/home/ue/.config/Unreal Engine/Un
 # Set the changelist number in Build.version
 COPY --from=shared set-changelist.py /tmp/
 ARG changelist=""
-RUN python3 /tmp/set-changelist.py Engine/Build/Build.version $changelist
+RUN python3 /tmp/set-changelist.py Engine/Build/Build.version "$changelist"
 
 # Disable Nuget package auditing (warnings NU1902 and NU1903)
 ENV NuGetAudit=false

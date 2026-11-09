@@ -1,0 +1,5 @@
+<Project>
+	<PropertyGroup>
+		<StopOnFirstFailure>true</StopOnFirstFailure>
+	</PropertyGroup>
+</Project>

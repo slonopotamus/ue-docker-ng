@@ -1,0 +1,5 @@
+<Project>
+	<PropertyGroup>
+		<GenerateManifests>false</GenerateManifests>
+	</PropertyGroup>
+</Project>
