@@ -5,6 +5,12 @@
 This document provides a high-level view of the changes to ue-docker-ng by release.
 For a detailed view of what has changed, refer to the {uri-project}/commits/main[commit history] on GitHub.
 
+== Unreleased
+
+* Add Wine platform: builds the Windows engine from source under Wine (installed from the https://www.winehq.org/archives/download-devel/[WineHQ apt repository], `wine-devel` channel) and produces an image that runs it on Linux.
+* Use `commentjson` instead of `json-with-comments` for parsing `Windows_SDK.json`
+* Unify `install-vs.py` and `parse-sdk-args.py` around a shared `Windows_SDK.json` parser (`shared/vs.py`); both the Windows and Wine images now use VS2022
+
 == 2.2.1 (2026-09-14)
 
 * Fix Unreal Engine version not properly passed to Install.ini on Linux

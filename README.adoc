@@ -11,7 +11,7 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-A modern, multi-stage Docker build pipeline for producing Unreal Engine editor images for Linux and Windows.
+A modern, multi-stage Docker build pipeline for producing Unreal Engine editor images for Linux, Windows and Wine.
 
 This project uses https://docs.docker.com/build/bake/[Docker Bake] for composable, cache-efficient builds.
 
@@ -20,7 +20,7 @@ NOTE: ue-docker-ng is inspired by link:https://github.com/adamrehn/ue4-docker[ue
 == Features
 
 * **Multi-stage builds** - keep the final image lean by copying only the installed engine binaries.
-* **Multi-platform** - produces images for both Linux and Windows.
+* **Multi-platform** - produces images for Linux, Windows and Wine (running the Windows engine on Linux via Wine installed from the https://www.winehq.org/archives/download-devel/[WineHQ apt repository], `wine-devel` channel).
 * **Buildx Bake** - targets are defined in link:docker-bake.hcl[docker-bake.hcl], making builds reproducible and easy to customise.
 * **Configurable source** - switch the Unreal Engine repository and tag via variables.
 * **Compressed OCI images** - output images use zstd compression by default for smaller storage footprint.
@@ -68,6 +68,16 @@ Build a Windows image::
 $ GIT_AUTH_TOKEN=<auth token> docker buildx bake --policy disabled=true https://github.com/slonopotamus/ue-docker-ng.git#{version} windows-minimal
 ----
 
+Build a Wine image::
++
+[source,bash,subs="attributes+"]
+----
+$ GIT_AUTH_TOKEN=<auth token> docker buildx bake https://github.com/slonopotamus/ue-docker-ng.git#{version} wine-minimal
+----
++
+The Wine image builds the Windows version of the engine from source under Wine (installed from the link:https://www.winehq.org/archives/download-devel/[WineHQ apt repository], `wine-devel` channel), so it can run the engine on Linux.
+Building the engine from source under Wine is https://github.com/EpicGames/WineResources/blob/main/docs/status.md[experimental] and requires Unreal Engine 5.7.0 or newer.
+
 NOTE: Images are not pushed to a remote registry by default.
 Add `--push` to `docker buildx bake` to push the built images.
 
@@ -112,6 +122,10 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 |`<tag-namespace>/minimal:<source-tag>-windows`
 |Docker tags applied to the final Windows image
 
+|`wine-minimal-tags`
+|`<tag-namespace>/minimal:<source-tag>-wine`
+|Docker tags applied to the final Wine image
+
 |`image-outputs`
 |`[{ type = "image", oci-mediatypes = true, compression = "zstd", unpack = false }]`
 |Output configuration for the final images (type, mediatypes, compression, push, unpack)
@@ -136,9 +150,13 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 |(empty)
 |Extra flags appended to the Windows BuildGraph command (on top of `common-buildgraph-args`)
 
+|`wine-buildgraph-args`
+|(empty)
+|Extra flags appended to the Wine BuildGraph command (on top of `common-buildgraph-args`)
+
 |`linux-baseimage`
 |`docker-image://ubuntu:26.04`
-|Base image for Linux builds
+|Base image for Linux and Wine builds
 
 |`windows-baseimage`
 |`docker-image://mcr.microsoft.com/windows/server:ltsc2022`
@@ -146,11 +164,12 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 
 |`linux-platforms`
 |`["linux/amd64"]`
-|Target platforms for Linux builds
+|Target platforms for Linux and Wine builds
 
 |`windows-platforms`
 |`["windows/amd64"]`
 |Target platforms for Windows builds
+
 |===
 
 == Project Structure
@@ -162,7 +181,8 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 ├── shared/
 │   ├── BuildConfiguration.xml        # UBT configuration
 │   ├── make-build-id-override.py     # Derives BuildId override from Build.version
-│   └── set-changelist.py             # Changelist injection utility
+│   ├── set-changelist.py             # Changelist injection utility
+│   └── vs.py                         # Windows_SDK.json parser shared by the Windows and Wine VS installers
 ├── linux/
 │   ├── base/                         # OS prerequisites, user setup
 │   │   └── install-prerequisites.sh  # Installation script
@@ -171,7 +191,7 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
 │   ├── minimal/                      # Final image
 │   └── test/
 │       └── ipv6/                     # IPv6 connectivity smoke test
-└── windows/
+├── windows/
     ├── base/                         # OS prerequisites, Chocolatey, Python
     │   └── install-prerequisites.ps1 # Choco/PowerShell installation script
     ├── source-prep/                  # Source checkout
@@ -183,4 +203,13 @@ $ source-tag=5.8.1-release docker buildx bake linux-minimal
     ├── minimal/                      # Final image
     └── test/
         └── 20gb/                     # Large-file (20GB) copy smoke test
+└── wine/
+    ├── base/                         # Wine (WineHQ apt repo, wine-devel)
+    │   └── wine-resources/           # WineResources files, vendored (MIT)
+    ├── source-prep/                  # Source checkout into the Wine prefix
+    ├── autosdk/                      # Windows compiler toolchain (AutoSDK) for Wine
+    │   └── parse-sdk-args.py         # Windows_SDK.json parser
+    ├── source/                       # Prepare source tree for building under Wine
+    ├── builder/                      # Run BuildGraph under Wine, create Installed Build
+    └── minimal/                      # Final image
 ----

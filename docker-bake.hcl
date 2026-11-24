@@ -42,7 +42,7 @@ variable "image-outputs" {
 }
 
 variable "linux-baseimage" {
-  description = "Base Docker image used for Linux build (docker-image:// or local reference)"
+  description = "Base Docker image used for Linux and Wine builds (docker-image:// or local reference)"
   type        = string
   default     = "docker-image://ubuntu:26.04"
 }
@@ -54,7 +54,7 @@ variable "windows-baseimage" {
 }
 
 variable "linux-platforms" {
-  description = "Target platforms for Linux image builds (e.g., linux/amd64, linux/arm64)"
+  description = "Target platforms for Linux and Wine image builds (e.g., linux/amd64, linux/arm64)"
   type = list(string)
   default = [
     "linux/amd64"
@@ -91,6 +91,13 @@ variable "windows-buildgraph-args" {
   ]
 }
 
+variable "wine-buildgraph-args" {
+  description = "Additional arguments passed to the Wine build graph"
+  type = list(string)
+  default = [
+  ]
+}
+
 variable "linux-setup-args" {
   description = "Arguments passed to Setup.sh during Linux engine setup (e.g., '--exclude=Android')"
   type = list(string)
@@ -100,7 +107,7 @@ variable "linux-setup-args" {
 }
 
 variable "windows-setup-args" {
-  description = "Arguments passed to Setup.bat during Windows engine setup (e.g., '--exclude=Android')"
+  description = "Arguments passed to Setup.bat during Windows and Wine engine setup (e.g., '--exclude=Android')"
   type = list(string)
   default = [
     "--exclude=Android", "--exclude=Mac", "--exclude=Linux",
@@ -120,6 +127,14 @@ variable "windows-minimal-tags" {
   type = list(string)
   default = [
     format("%s/minimal:%s-windows", tag-namespace, source-tag)
+  ]
+}
+
+variable "wine-minimal-tags" {
+  description = "Docker tags applied to the final Wine image"
+  type = list(string)
+  default = [
+    format("%s/minimal:%s-wine", tag-namespace, source-tag)
   ]
 }
 
@@ -247,6 +262,7 @@ target "windows-source" {
   description = "Runs Setup.bat to prepare the Windows engine source tree"
   context     = "windows/source"
   contexts = {
+    shared      = "shared"
     source-prep = "target:windows-source-prep"
     vs          = "target:windows-vs"
   }
@@ -290,6 +306,108 @@ target "windows-minimal" {
   tags      = windows-minimal-tags
   output    = image-outputs
   platforms = windows-platforms
+}
+
+target "wine-base" {
+  description = "Builds Epic's patched version of Wine (WineResources files are vendored in the build context)"
+  context     = "wine/base"
+  contexts = {
+    base = linux-baseimage
+  }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
+  platforms = linux-platforms
+}
+
+target "wine-source-prep" {
+  description = "Clones the Unreal Engine repository into the Wine prefix"
+  context     = "wine/source-prep"
+  contexts = {
+    base = "target:wine-base"
+  }
+  args = {
+    repository = source-url
+  }
+  secret = [
+    {
+      id = "GIT_AUTH_TOKEN"
+    }
+  ]
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
+  platforms = linux-platforms
+}
+
+target "wine-autosdk" {
+  description = "Installs the Windows compiler toolchain (AutoSDK) required by the Unreal Engine"
+  context     = "wine/autosdk"
+  contexts = {
+    base        = "target:wine-base"
+    shared      = "shared"
+    source-prep = "target:wine-source-prep"
+  }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
+  platforms = linux-platforms
+}
+
+target "wine-source" {
+  description = "Prepares the Unreal Engine source tree for building under Wine"
+  context     = "wine/source"
+  contexts = {
+    autosdk     = "target:wine-autosdk"
+    shared      = "shared"
+    source-prep = "target:wine-source-prep"
+  }
+  args = {
+    setup_args = join(" ", windows-setup-args)
+  }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
+  platforms = linux-platforms
+}
+
+target "wine-builder" {
+  description = "Runs build graph under Wine to build installed engine for Windows"
+  context     = "wine/builder"
+  contexts = {
+    source = "target:wine-source"
+    shared = "shared"
+  }
+  args = {
+    changelist = changelist
+    buildgraph_args = join(" ", concat(common-buildgraph-args, wine-buildgraph-args))
+  }
+  output = [
+    {
+      type = "cacheonly"
+    }
+  ]
+  platforms = linux-platforms
+}
+
+target "wine-minimal" {
+  description = "Final Wine image assembled from AutoSDK and builder layers; tagged and pushed"
+  context     = "wine/minimal"
+  contexts = {
+    autosdk = "target:wine-autosdk"
+    builder = "target:wine-builder"
+  }
+  tags      = wine-minimal-tags
+  output    = image-outputs
+  platforms = linux-platforms
 }
 
 target "linux-ipv6-test" {
